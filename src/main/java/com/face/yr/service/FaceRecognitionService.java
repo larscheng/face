@@ -37,9 +37,9 @@ public class FaceRecognitionService {
         System.out.println(image);
         // 人脸注册
         JSONObject res = client.addUser(image, imageType, groupId, userId, options);
-        Response addResponse = JSON.parseObject(res.toString(), Response.class);
+        Response response = JSON.parseObject(res.toString(), Response.class);
         System.out.println(res.toString(2));
-        return addResponse.toString();
+        return new JSONObject(response).toString();
     }
 
     public String search(String image,String userId) {
@@ -53,7 +53,7 @@ public class FaceRecognitionService {
         //"传入BASE64字符串或URL字符串或FACE_TOKEN字符串";
         String imageType = "BASE64";
         String groupIdList = "group_repeat";
-        image = image.split(",")[1];
+//        image = image.split(",")[1];
         // 人脸搜索
         JSONObject res = client.search(image, imageType, groupIdList, options);
         Response response = JSON.parseObject(res.toString(), Response.class);

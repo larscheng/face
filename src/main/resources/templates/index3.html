@@ -31,17 +31,17 @@
 
 	<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,300' rel='stylesheet' type='text/css'>
 	
-	<link rel="stylesheet" href="css/bootstrap.min.css">
-	<link rel="stylesheet" href="css/animate.css">
-	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="../static/css/bootstrap.min.css">
+	<link rel="stylesheet" href="../static/css/animate.css">
+	<link rel="stylesheet" href="../static/css/style.css">
 
 
 	<!-- Modernizr JS -->
-	<script src="js/modernizr-2.6.2.min.js"></script>
+	<script src="../static/js/modernizr-2.6.2.min.js"></script>
 	<!-- FOR IE9 below -->
 	<!--[if lt IE 9]>
-	<script src="js/respond.min.js"></script>
-	<![endif]-->
+		<script src="../static/js/respond.min.js"></script>
+		<![endif]-->
 
 	</head>
 	<body class="style-2">
@@ -50,7 +50,7 @@
 			<div class="row">
 				<div class="col-md-12 text-center">
 					<ul class="menu">
-						<li class="active" style="font-size: xx-large ;font-weight: bold"><a href="index.html">基于人脸识别的课堂签到系统</a></li>
+						<li class="active" style="font-size: xx-large ;font-weight: bold"><a href="index3.html">基于人脸识别的课堂签到系统</a></li>
 					</ul>
 				</div>
 			</div>
@@ -71,14 +71,11 @@
 							<!--<input type="text" class="form-control" id="userInfo" placeholder="姓名" autocomplete="off">-->
 						<!--</div>-->
 						<div class="form-group">
-							<input type="button" class="btn btn-primary" title="开启摄像头" value="开启摄像头" onclick="getMedia()" />
-
-							<button id="snap" onclick="takePhoto()">拍照</button>
-							<video id="video" width="500px" height="500px" autoplay="autoplay"></video>
-
+							<!--<label for="remember"><input type="checkbox" id="remember"> Remember Me</label>-->
+							<input id="input-file" class="form-control" type="file" onchange="handleSelected()" accept="image/jpeg" capture="camera"/>
 						</div>
 						<div class="form-group">
-							<p>暂无账号? <a href="sign-up.html">点击注册</a><!-- | <a href="forgot.html">Forgot Password?</a>--></p>
+							<p>暂无账号? <a href="../static/sign-up.html">点击注册</a><!-- | <a href="forgot.html">Forgot Password?</a>--></p>
 						</div>
 						<div class="form-group">
 							<input type="button" value="登录" onclick="login()" class="btn btn-primary">
@@ -94,7 +91,7 @@
 					<!-- Start Sign In Form -->
 					<form id="pic" style="display: none" action="#" class="fh5co-form animate-box" data-animate-effect="fadeInLeft">
 						<h2>已选择的图片</h2>
-						<canvas id="canvas" width="500px" height="500px"></canvas>
+						<img id="preview" src="" width="50%" height="50%"/>
 					</form>
 					<!-- END Sign In Form -->
 					<!-- 模态框（Modal） -->
@@ -129,49 +126,17 @@
 		</div>
 	
 	<!-- jQuery -->
-	<script src="js/jquery.min.js"></script>
+	<script src="../static/js/jquery.min.js"></script>
 	<!-- Bootstrap -->
-	<script src="js/bootstrap.min.js"></script>
+	<script src="../static/js/bootstrap.min.js"></script>
 	<!-- Placeholder -->
-	<script src="js/jquery.placeholder.min.js"></script>
+	<script src="../static/js/jquery.placeholder.min.js"></script>
 	<!-- Waypoints -->
-	<script src="js/jquery.waypoints.min.js"></script>
+	<script src="../static/js/jquery.waypoints.min.js"></script>
 	<!-- Main JS -->
-	<script src="js/main.js"></script>
+	<script src="../static/js/main.js"></script>
 
 	<script>
-
-
-
-        function getMedia() {
-            let constraints = {
-                video: {width: 500, height: 500},
-                audio: true
-            };
-            //获得video摄像头区域
-            let video = document.getElementById("video");
-            //这里介绍新的方法，返回一个 Promise对象
-            // 这个Promise对象返回成功后的回调函数带一个 MediaStream 对象作为其参数
-            // then()是Promise对象里的方法
-            // then()方法是异步执行，当then()前的方法执行完后再执行then()内部的程序
-            // 避免数据没有获取到
-            let promise = navigator.mediaDevices.getUserMedia(constraints);
-            promise.then(function (MediaStream) {
-                video.srcObject = MediaStream;
-                video.play();
-            });
-        }
-
-        function takePhoto() {
-            //获得Canvas对象
-            let video = document.getElementById("video");
-            let canvas = document.getElementById("canvas");
-            let ctx = canvas.getContext('2d');
-            ctx.drawImage(video, 0, 0, 500, 500);
-        }
-
-
-
         var image;
         function handleSelected(){
             /**得到FileList的第一个元素，也就是上传的图片**/
@@ -193,9 +158,6 @@
         }
 
         function login() {
-            var Pic = document.getElementById("canvas").toDataURL("image/jpg");
-            //对其进行base64编 之后的字符串
-            image = Pic.replace(/^data:image\/(png|jpg);base64,/,"");
             $.ajax({
                 type: "GET",  //使用提交的方法 post、get
                 url: "searchFace/",   //提交的地址

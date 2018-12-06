@@ -59,9 +59,9 @@
 					<!-- Start Sign In Form -->
 					<form action="#" class="fh5co-form animate-box" data-animate-effect="fadeInLeft">
 						<h2>注册账户</h2>
-						<div class="form-group">
-							<div class="alert alert-success" role="alert">Your info has been saved.</div>
-						</div>
+						<!--<div class="form-group">-->
+							<!--<div class="alert alert-success" role="alert">Your info has been saved.</div>-->
+						<!--</div>-->
 						<div class="form-group">
 							<label for="userId" class="sr-only">账号</label>
 							<input type="text" class="form-control" id="userId" placeholder="userId" autocomplete="off">
@@ -79,7 +79,7 @@
 							<!--<input type="password" class="form-control" id="re-password" placeholder="Re-type Password" autocomplete="off">-->
 						<!--</div>-->
 						<div class="form-group">
-							<input id="input-file" class="form-control" type="file" onchange="handleSelected()" accept="image/jpeg" capture="camera"/>
+								<input type="button" class="btn btn-info" id="snap" value="拍 照" />
 						</div>
 						<div class="form-group">
 							<p>Already registered? <a href="index.html">Sign In</a></p>
@@ -93,17 +93,64 @@
 
 				</div>
 
+
 				<div class="col-md-4">
 
 
 					<!-- Start Sign In Form -->
-					<form id="pic" style="display: none" action="#" class="fh5co-form animate-box" data-animate-effect="fadeInLeft">
-						<h2>已选择的图片</h2>
-						<img id="preview" style="display: none"  src="" width="50%" height="50%"/>
+					<form id="sxt" action="#" class="fh5co-form animate-box" data-animate-effect="fadeInLeft">
+						<h2>请正对屏幕</h2>
+						<div class="form-group">
+							<video id="video" width="300" height="280" autoplay></video>
+						</div>
+					</form>
+					<!-- END Sign In Form -->
+					<!-- 模态框（Modal） -->
+					<div class="modal fade" id="myModal"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal"
+											aria-hidden="true">×
+									</button>
+									<h4 class="modal-title" id="myModalLabel">
+										提示
+									</h4>
+								</div>
+								<div class="modal-body" id="myModalBody" style="text-align: center">
+
+								</div>
+								<div class="modal-footer">
+									<button type="button" onclick="window.location.reload()" class="btn btn-default"
+											data-dismiss="modal">关闭
+									</button>
+								</div>
+							</div><!-- /.modal-content -->
+						</div><!-- /.modal-dialog -->
+					</div><!-- /.modal -->
+
+				</div>
+
+				<div class="col-md-4">
+
+
+					<!-- Start Sign In Form -->
+					<form id="pic" style="display: none"  action="#" class="fh5co-form animate-box" data-animate-effect="fadeInLeft">
+
+						<h2>已拍摄的照片</h2>
+						<!--<canvas id="canvas" width="500px" height="500px"></canvas>-->
+						<div  class="form-group">
+							<canvas style="" id="canvas" width="320" height="320"></canvas>
+						</div>
 					</form>
 					<!-- END Sign In Form -->
 
 				</div>
+			</div>
+			<div class="row" style="padding-top: 60px; clear: both;">
+				<div class="col-md-12 text-center"><p><small>&copy; All Rights Reserved. </small></p></div>
+			</div>
+		</div>
 			</div>
 			<div class="row" style="padding-top: 60px; clear: both;">
 				<div class="col-md-12 text-center"><p><small>&copy; All Rights Reserved. </small></p></div>
@@ -123,27 +170,54 @@
 
 	<script>
 		var image;
-            function handleSelected(){
-                /**得到FileList的第一个元素，也就是上传的图片**/
-                var e = window.event || arguments[0];
-                let file = e.target.files[0];
-                console.log(file);
-                /**创建一个FileReader实例，用来读取文件**/
-                let reader = new FileReader();
-                /**成功读取之后将图片显示出来**/
-                reader.onload = function(e){
-                    let image = document.getElementById('preview');
-                    image.src = e.target.result;
-                    document.getElementById('pic').style.display="";
-                    image.style.display="";
-                    image.onload = function (){
-                        image = e.target.result;
-                        console.log(image);
-                        console.log('图片加载出来了...')
-                    }
-                };
-                reader.readAsDataURL(file);
+
+        var image;
+        //判断浏览器是否支持HTML5 Canvas
+        window.onload = function () {
+            try {
+                //动态创建一个canvas元 ，并获取他2Dcontext。如果出现异常则表示不支持 document.createElement("canvas").getContext("2d");
+                // document.getElementById("support").innerHTML = "浏览器支持HTML5 CANVAS";
             }
+            catch (e) {
+                // document.getElementByIdx("support").innerHTML = "浏览器不支持HTML5 CANVAS";
+            }
+        };
+        //这段代 主要是获取摄像头的视频流并显示在Video 签中
+        window.addEventListener("DOMContentLoaded", function () {
+            var canvas = document.getElementById("canvas"),
+                context = canvas.getContext("2d"),
+                video = document.getElementById("video"),
+                videoObj = { "video": true },
+                errBack = function (error) {
+                    console.log("Video capture error: ", error.code);
+                };
+            $("#snap").click(function () {
+                context.drawImage(video, 0, 0, 300, 220);
+                document.getElementById('pic').style.display="";
+                var canvans = document.getElementById("canvas");
+                //获取浏览器页面的画布对象
+                //以下开始编 数据
+                var imgData = canvans.toDataURL();
+                //将图像转换为base64数据
+                image = imgData.substr(22);
+                console.log(image);
+                document.getElementById('pic').style.display="";
+            });
+            //navigator.getUserMedia这个写法在Opera中好像是navigator.getUserMedianow
+            if (navigator.getUserMedia) {
+                navigator.getUserMedia(videoObj, function (stream) {
+                    video.srcObject = stream;
+                    video.play();
+                }, errBack);
+            } else if (navigator.webkitGetUserMedia) {
+                navigator.webkitGetUserMedia(videoObj, function (stream) {
+                    video.src = window.webkitURL.createObjectURL(stream);
+                    video.play();
+                }, errBack);
+            }
+
+        }, false);
+
 
 
         function register() {
@@ -159,9 +233,14 @@
                 async: false,   //配置是否异步操作
                 dataType: "json",//返回数据类型的格式
                 success: function (data) {  //回调操作
-                    data = eval("(" + data + ")");
-                    aDataSet = data;
-                    console.log(data)
+
+                    let state = data.error_code;
+                    if(state === 0){
+                        $('#myModalBody').html('注册成功，现在可以去登录了');
+                    }else {
+                        $('#myModalBody').html(data.error_msg)
+                    }
+                    $('#myModal').modal('show')
                 }
             });
 		}
