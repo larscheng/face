@@ -1,0 +1,11 @@
+server:
+  port: 9607
+  max-http-header-size: 10000000
+
+
+
+face:
+  appId: 15066202
+  apiKey: 18mzC1Bf5ieqtisG7IWAhbDl
+  secretKey: 4GioZSsQ3GDpEkkG1UfrVTLfVPyVgGKI
+

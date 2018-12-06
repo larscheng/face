@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>GET VIDEO</title>
+    <meta charset="utf-8">
+</head>
+<body>
+<form id="form" method="post" action="http://192.168.1.131:8080/task/add" enctype="multipart/form-data">
+    <input id="input-file" type="file" accept="image/jpeg" capture="camera"/>
+</form>
+<script>
+    $("input[type='file']").on('change', function () {
+        $('#form').submit();
+        //var oFReader = new FileReader();
+        //var file = document.getElementById('input-file').files[0];
+        //oFReader.readAsDataURL(file);
+        //oFReader.onloadend = function(oFRevent){
+        // var src = oFRevent.target.result;
+        // $('.content').attr('src',src);
+        // alert(src);
+        //}
+    });
+</script>
+</body>
+</html>

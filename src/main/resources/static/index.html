@@ -1,0 +1,189 @@
+
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+	<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Minimal and Clean Sign up / Login and Forgot Form by FreeHTML5.co</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="Free HTML5 Template by FreeHTML5.co" />
+	<meta name="keywords" content="free html5, free template, free bootstrap, html5, css3, mobile first, responsive" />
+	
+
+  
+
+  	<!-- Facebook and Twitter integration -->
+	<meta property="og:title" content=""/>
+	<meta property="og:image" content=""/>
+	<meta property="og:url" content=""/>
+	<meta property="og:site_name" content=""/>
+	<meta property="og:description" content=""/>
+	<meta name="twitter:title" content="" />
+	<meta name="twitter:image" content="" />
+	<meta name="twitter:url" content="" />
+	<meta name="twitter:card" content="" />
+
+	<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+	<link rel="shortcut icon" href="favicon.ico">
+
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,300' rel='stylesheet' type='text/css'>
+	
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/animate.css">
+	<link rel="stylesheet" href="css/style.css">
+
+
+	<!-- Modernizr JS -->
+	<script src="js/modernizr-2.6.2.min.js"></script>
+	<!-- FOR IE9 below -->
+	<!--[if lt IE 9]>
+	<script src="js/respond.min.js"></script>
+	<![endif]-->
+
+	</head>
+	<body class="style-2">
+
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12 text-center">
+					<ul class="menu">
+						<li class="active" style="font-size: xx-large ;font-weight: bold"><a href="index.html">基于人脸识别的课堂签到系统</a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-4">
+					
+
+					<!-- Start Sign In Form -->
+					<form action="#" class="fh5co-form animate-box" data-animate-effect="fadeInLeft">
+						<h2>登录</h2>
+						<div class="form-group">
+							<label for="userId" class="sr-only">账号</label>
+							<input type="text" class="form-control" id="userId" placeholder="账号" autocomplete="off">
+						</div>
+
+						<!--<div class="form-group">-->
+							<!--<label for="userInfo" class="sr-only">姓名</label>-->
+							<!--<input type="text" class="form-control" id="userInfo" placeholder="姓名" autocomplete="off">-->
+						<!--</div>-->
+						<div class="form-group">
+							<!--<label for="remember"><input type="checkbox" id="remember"> Remember Me</label>-->
+							<input id="input-file" class="form-control" type="file" onchange="handleSelected()" accept="image/jpeg" capture="camera"/>
+						</div>
+						<div class="form-group">
+							<p>暂无账号? <a href="sign-up.html">点击注册</a><!-- | <a href="forgot.html">Forgot Password?</a>--></p>
+						</div>
+						<div class="form-group">
+							<input type="button" value="登录" onclick="login()" class="btn btn-primary">
+						</div>
+					</form>
+					<!-- END Sign In Form -->
+
+				</div>
+
+				<div class="col-md-4">
+
+
+					<!-- Start Sign In Form -->
+					<form id="pic" style="display: none" action="#" class="fh5co-form animate-box" data-animate-effect="fadeInLeft">
+						<h2>已选择的图片</h2>
+						<img id="preview" src="" width="50%" height="50%"/>
+					</form>
+					<!-- END Sign In Form -->
+					<!-- 模态框（Modal） -->
+					<div class="modal fade" id="myModal"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal"
+											aria-hidden="true">×
+									</button>
+									<h4 class="modal-title" id="myModalLabel">
+										提示
+									</h4>
+								</div>
+								<div class="modal-body" id="myModalBody" style="text-align: center">
+
+								</div>
+								<div class="modal-footer">
+									<button type="button" onclick="window.location.reload()" class="btn btn-default"
+											data-dismiss="modal">关闭
+									</button>
+								</div>
+							</div><!-- /.modal-content -->
+						</div><!-- /.modal-dialog -->
+					</div><!-- /.modal -->
+
+				</div>
+			</div>
+			<div class="row" style="padding-top: 60px; clear: both;">
+				<div class="col-md-12 text-center"><p><small>&copy; All Rights Reserved. </small></p></div>
+			</div>
+		</div>
+	
+	<!-- jQuery -->
+	<script src="js/jquery.min.js"></script>
+	<!-- Bootstrap -->
+	<script src="js/bootstrap.min.js"></script>
+	<!-- Placeholder -->
+	<script src="js/jquery.placeholder.min.js"></script>
+	<!-- Waypoints -->
+	<script src="js/jquery.waypoints.min.js"></script>
+	<!-- Main JS -->
+	<script src="js/main.js"></script>
+
+	<script>
+        var image;
+        function handleSelected(){
+            /**得到FileList的第一个元素，也就是上传的图片**/
+            var e = window.event || arguments[0];
+            let file = e.target.files[0];
+            console.log(file)
+            /**创建一个FileReader实例，用来读取文件**/
+            let reader = new FileReader();
+            /**成功读取之后将图片显示出来**/
+            reader.onload = function(e){
+                let img = document.getElementById('preview');
+                img.src = e.target.result;
+                document.getElementById('pic').style.display="";
+                image = e.target.result;
+                img.onload = function (){
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function login() {
+            $.ajax({
+                type: "GET",  //使用提交的方法 post、get
+                url: "searchFace/",   //提交的地址
+                data: {
+						userId: $('#userId').val(),
+						image: image
+                	},  //数据
+                async: true,   //配置是否异步操作
+                dataType: "json",//返回数据类型的格式
+                success: function (data) {  //回调操作
+                    console.log(data);
+                    console.log(data.error_code);
+                    let state = data.error_code;
+                    if(state === 0){
+                        let score =data.result.user_list[0].score;
+                        $('#myModalBody').html('识别成功,本次相似度:'+score.sub(0,3)+'%');
+					}else if (state === 404) {
+                        $('#myModalBody').html('照片相似度过低无法识别您的身份,请拍摄更清晰的照片！')
+					}else {
+                        $('#myModalBody').html(data.error_msg)
+					}
+                    $('#myModal').modal('show')
+                }
+            });
+        }
+	</script>
+	</body>
+</html>
+
