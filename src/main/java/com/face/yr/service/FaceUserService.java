@@ -14,6 +14,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +37,7 @@ public class FaceUserService extends  ServiceImpl <IFaceUserMapper, FaceUser>  {
         if (ObjectUtils.isEmpty(user)){
             return new JSONObject(new Response().setError_code(4001).setError_msg("重新填写！")).toString();
         }
+        user.setUserType(2).setGmtCreate(new Date());
         if (this.insert(user)){
             return new JSONObject(new Response().setError_code(8001).setError_msg("添加成功！")).toString();
         }else {
@@ -49,12 +51,13 @@ public class FaceUserService extends  ServiceImpl <IFaceUserMapper, FaceUser>  {
      * @param type 用户类型
      * @return
      */
-    public String listUser(Integer type) {
+    public void listUser(Model model,Integer type) {
+        Map<String,Object> map = new HashMap<>();
         List<FaceUser> faceUsers = this.selectList(new EntityWrapper<>(new FaceUser().setUserType(type)));
-        if (CollectionUtils.isEmpty(faceUsers)){
-            return new JSONObject(new Response().setError_code(4001).setError_msg("暂无数据！")).toString();
+        if (!CollectionUtils.isEmpty(faceUsers)){
+            map.put("teaList",faceUsers);
         }
-        return new JSONObject(faceUsers).toString();
+        model.addAllAttributes(map);
     }
 
     public String login(FaceUser faceUser, HttpSession session) {

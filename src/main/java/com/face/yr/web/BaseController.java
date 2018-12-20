@@ -33,6 +33,13 @@ public class BaseController {
         return "index";
     }
 
+    @RequestMapping(value = "/tea", method = RequestMethod.GET)
+    public String tea(Model model) {
+
+        return "teaList";
+    }
+
+
     @RequestMapping(value = "/register", method = RequestMethod.GET)
     public String register(Model model) {
         return "register";
