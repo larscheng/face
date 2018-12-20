@@ -7,10 +7,10 @@ spring:
   application:
     name: lease-singapore
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/face?useUnicode=true&characterEncoding=utf8
+    url: jdbc:mysql://127.0.0.1:3306/face?serverTimezone=GMT%2B8&useUnicode=true"
     username: root
     password: 123456
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       initial-size: 5
@@ -36,10 +36,17 @@ spring:
           slow-sql-millis: 1000
       connection-init-sqls: SET NAMES utf8mb4
 
+  #配置支持thymeleaf模板引擎
+  thymeleaf:
+    cache: false
+    prefix: classpath:templates/
+    suffix: .html
+   #配置静态资源的位置
   mvc:
-    view:
-     prefix: classpath:/templates/
-     suffix: .html
+     static-path-pattern: /**
+  resources:
+     static-locations: classpath:/static/
+
 
 
 face:

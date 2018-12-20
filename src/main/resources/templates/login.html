@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
   <head>
     <title>登录</title>
 	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
@@ -16,18 +16,75 @@
   <body id="login">
     <div class="container">
 
-      <form class="form-signin" action="index.html">
+      <form class="form-signin" id="loginForm"    >
         <h2 class="form-signin-heading">登录</h2>
-        <input type="text" class="input-block-level" placeholder="账号">
-        <input type="password" class="input-block-level" placeholder="密码">
+        <input type="text" class="input-block-level" name="userCode" id="userCode" placeholder="账号">
+        <input type="password" class="input-block-level" name="userPassword" id="userPassword" placeholder="密码">
         <div class="form-group">
           <p>暂无账号? <a href="./register.html" th:href="@{/register}">点击注册</a></p>
         </div>
-        <button class="btn btn-large btn-primary" type="submit">登录</button>
+        <button class="btn btn-large btn-primary" type="button" onclick="login()">登录</button>
+        <!--<button class="btn btn-large btn-primary" type="submit">登录</button>-->
       </form>
 
+      <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+           aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal"
+                      aria-hidden="true">×
+              </button>
+              <h4 class="modal-title" id="myModalLabel">
+                提示
+              </h4>
+            </div>
+            <div class="modal-body" id="myModalBody" style="text-align: center">
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" onclick="window.location.reload()" class="btn btn-default"
+                      data-dismiss="modal">关闭
+              </button>
+            </div>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
     </div> <!-- /container -->
     <script src="vendors/jquery-1.9.1.min.js"></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" >
+        function login() {
+            var form = new FormData($('#loginForm')[0]);
+            var userCode = $("#userCode").val();
+            var userPassword = $("#userPassword").val();
+            var formData = new FormData();
+            formData.append("userCode",userCode);
+            formData.append("userPassword",userPassword);
+
+            $.ajax({
+                type: "POST",  //使用提交的方法 post、get
+                url: "/login",   //提交的地址
+                data: form,  //数据
+                async: true,   //配置是否异步操作
+                dataType: "json",//返回数据类型的格式
+                processData: false,
+                contentType: false,
+                success: function (data) {  //回调操作+
+                    console.log(data);
+                    console.log(11111);
+                    var sessionUser = data.msgBody;
+                    console.log(sessionUser);
+                    let state = data.error_code;
+                    if (state === 8001){
+                        location.href="/index";
+                    }else {
+                        $('#myModalBody').html(data.error_msg)
+                        $('#myModal').modal('show')
+                    }
+                }
+            });
+        }
+    </script>
   </body>
 </html>

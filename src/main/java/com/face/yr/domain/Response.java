@@ -14,6 +14,17 @@ public class Response {
     private int cached;
     private int error_code;
     private long timestamp;
+    private String msgBody;
+
+
+    public String getMsgBody() {
+        return msgBody;
+    }
+
+    public Response setMsgBody(String msgBody) {
+        this.msgBody = msgBody;
+        return this;
+    }
 
     public Result getResult() {
         return result;

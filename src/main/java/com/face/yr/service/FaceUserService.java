@@ -1,5 +1,6 @@
 package com.face.yr.service;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.face.yr.domain.Response;
 import org.json.JSONObject;
@@ -8,10 +9,14 @@ import org.springframework.stereotype.Service;
 import com.face.yr.dao.IFaceUserMapper;
 import com.face.yr.domain.po.FaceUser;
 import com.baomidou.framework.service.impl.ServiceImpl;
+import org.springframework.ui.Model;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
+import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -50,5 +55,29 @@ public class FaceUserService extends  ServiceImpl <IFaceUserMapper, FaceUser>  {
             return new JSONObject(new Response().setError_code(4001).setError_msg("暂无数据！")).toString();
         }
         return new JSONObject(faceUsers).toString();
+    }
+
+    public String login(FaceUser faceUser, HttpSession session) {
+        FaceUser user = this.selectOne(new EntityWrapper<>(faceUser));
+        if (ObjectUtils.isEmpty(user)){
+            System.out.println("------------------------");
+            return new JSONObject(new Response().setError_code(4001).setError_msg("登录失败！")).toString();
+        }
+        session.setAttribute("sessionUser",user);
+        session.setAttribute("userType",user.getUserType());
+        return new JSONObject(new Response().setError_code(8001)).toString();
+    }
+    public String login2(FaceUser faceUser, HttpSession session, Model model) {
+        FaceUser user = this.selectOne(new EntityWrapper<>(faceUser));
+        Map<String ,Object> map = new HashMap<>();
+        if (ObjectUtils.isEmpty(user)){
+            System.out.println("------------------------");
+            map.put("msg","登录失败");
+            model.addAllAttributes(map);
+            return "";
+        }
+        session.setAttribute("sessionUser",user);
+        session.setAttribute("userType",user.getUserType());
+        return "index";
     }
 }

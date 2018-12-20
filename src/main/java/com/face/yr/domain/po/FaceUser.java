@@ -18,52 +18,52 @@ import com.baomidou.mybatisplus.annotations.TableName;
 public class FaceUser implements Serializable {
 
 	@TableField(exist = false)
-	private static final long serialVersionUID = 1L;
+	public static final long serialVersionUID = 1L;
 
 	/**  */
 	@TableId(type = IdType.AUTO)
-	private Integer id;
+	public Integer id;
 
 
 	/**  */
 	@TableField(value = "user_name")
-	private String userName;
+	public String userName;
 
 	/**  */
 	@TableField(value = "user_code")
-	private String userCode;
+	public String userCode;
 
 	/**  */
 	@TableField(value = "user_phone")
-	private String userPhone;
+	public String userPhone;
 
 	/**  */
 	@TableField(value = "user_password")
-	private String userPassword;
+	public String userPassword;
 
 	/** 用户类型，0禁用1启用 */
 	@TableField(value = "user_state")
-	private Integer userState;
+	public Integer userState;
 
 	/** 用户类型，1管理员2教师3学生 */
 	@TableField(value = "user_type")
-	private Integer userType;
+	public Integer userType;
 
 	/** 成功签到次数 */
 	@TableField(value = "stu_sign_times")
-	private Integer stuSignTimes;
+	public Integer stuSignTimes;
 
 	/** 缺勤次数 */
 	@TableField(value = "stu_absentee_times")
-	private Integer stuAbsenteeTimes;
+	public Integer stuAbsenteeTimes;
 
 	/**  */
 	@TableField(value = "gmt_create")
-	private Date gmtCreate;
+	public Date gmtCreate;
 
 	/**  */
 	@TableField(value = "gmt_modify")
-	private Date gmtModify;
+	public Date gmtModify;
 
 
 	public Integer getId() {
