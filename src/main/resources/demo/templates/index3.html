@@ -31,17 +31,17 @@
 
 	<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,300' rel='stylesheet' type='text/css'>
 	
-	<link rel="stylesheet" href="css/bootstrap.min.css">
-	<link rel="stylesheet" href="css/animate.css">
-	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="../static/css/bootstrap.min.css">
+	<link rel="stylesheet" href="../static/css/animate.css">
+	<link rel="stylesheet" href="../static/css/style.css">
 
 
 	<!-- Modernizr JS -->
-	<script src="js/modernizr-2.6.2.min.js"></script>
+	<script src="../static/js/modernizr-2.6.2.min.js"></script>
 	<!-- FOR IE9 below -->
 	<!--[if lt IE 9]>
-	<script src="js/respond.min.js"></script>
-	<![endif]-->
+		<script src="../static/js/respond.min.js"></script>
+		<![endif]-->
 
 	</head>
 	<body class="style-2">
@@ -50,7 +50,7 @@
 			<div class="row">
 				<div class="col-md-12 text-center">
 					<ul class="menu">
-						<li class="active" style="font-size: xx-large ;font-weight: bold"><a href="../templates/index3.html">基于人脸识别的课堂签到系统</a></li>
+						<li class="active" style="font-size: xx-large ;font-weight: bold"><a href="index3.html">基于人脸识别的课堂签到系统</a></li>
 					</ul>
 				</div>
 			</div>
@@ -71,10 +71,11 @@
 							<!--<input type="text" class="form-control" id="userInfo" placeholder="姓名" autocomplete="off">-->
 						<!--</div>-->
 						<div class="form-group">
-							<input type="button" class="btn btn-info" id="snap" value="拍 照" />
+							<!--<label for="remember"><input type="checkbox" id="remember"> Remember Me</label>-->
+							<input id="input-file" class="form-control" type="file" onchange="handleSelected()" accept="image/jpeg" capture="camera"/>
 						</div>
 						<div class="form-group">
-							<p>暂无账号? <a href="sign-up.html">点击注册</a><!-- | <a href="forgot.html">Forgot Password?</a>--></p>
+							<p>暂无账号? <a href="../demo/sign-up.html">点击注册</a><!-- | <a href="forgot.html">Forgot Password?</a>--></p>
 						</div>
 						<div class="form-group">
 							<input type="button" value="登录" onclick="login()" class="btn btn-primary">
@@ -88,11 +89,9 @@
 
 
 					<!-- Start Sign In Form -->
-					<form id="sxt" action="#" class="fh5co-form animate-box" data-animate-effect="fadeInLeft">
-						<h2>请正对屏幕</h2>
-						<div class="form-group">
-							<video id="video" width="300" height="280" autoplay></video>
-						</div>
+					<form id="pic" style="display: none" action="#" class="fh5co-form animate-box" data-animate-effect="fadeInLeft">
+						<h2>已选择的图片</h2>
+						<img id="preview" src="" width="50%" height="50%"/>
 					</form>
 					<!-- END Sign In Form -->
 					<!-- 模态框（Modal） -->
@@ -120,22 +119,6 @@
 					</div><!-- /.modal -->
 
 				</div>
-
-				<div class="col-md-4">
-
-
-					<!-- Start Sign In Form -->
-					<form id="pic" style="display: none"  action="#" class="fh5co-form animate-box" data-animate-effect="fadeInLeft">
-
-						<h2>已拍摄的照片</h2>
-						<!--<canvas id="canvas" width="500px" height="500px"></canvas>-->
-						<div  class="form-group">
-							<canvas style="" id="canvas" width="320" height="320"></canvas>
-						</div>
-					</form>
-					<!-- END Sign In Form -->
-
-				</div>
 			</div>
 			<div class="row" style="padding-top: 60px; clear: both;">
 				<div class="col-md-12 text-center"><p><small>&copy; All Rights Reserved. </small></p></div>
@@ -143,70 +126,38 @@
 		</div>
 	
 	<!-- jQuery -->
-	<script src="js/jquery.min.js"></script>
+	<script src="../static/js/jquery.min.js"></script>
 	<!-- Bootstrap -->
-	<script src="js/bootstrap.min.js"></script>
+	<script src="../static/js/bootstrap.min.js"></script>
 	<!-- Placeholder -->
-	<script src="js/jquery.placeholder.min.js"></script>
+	<script src="../static/js/jquery.placeholder.min.js"></script>
 	<!-- Waypoints -->
-	<script src="js/jquery.waypoints.min.js"></script>
+	<script src="../static/js/jquery.waypoints.min.js"></script>
 	<!-- Main JS -->
-	<script src="js/main.js"></script>
+	<script src="../static/js/main.js"></script>
 
 	<script>
-
-
         var image;
-        //判断浏览器是否支持HTML5 Canvas
-        window.onload = function () {
-            try {
-                //动态创建一个canvas元 ，并获取他2Dcontext。如果出现异常则表示不支持 document.createElement("canvas").getContext("2d");
-                // document.getElementById("support").innerHTML = "浏览器支持HTML5 CANVAS";
-            }
-            catch (e) {
-                // document.getElementByIdx("support").innerHTML = "浏览器不支持HTML5 CANVAS";
-            }
-        };
-        //这段代 主要是获取摄像头的视频流并显示在Video 签中
-        window.addEventListener("DOMContentLoaded", function () {
-            var canvas = document.getElementById("canvas"),
-                context = canvas.getContext("2d"),
-                video = document.getElementById("video"),
-                videoObj = { "video": true },
-                errBack = function (error) {
-                    console.log("Video capture error: ", error.code);
-                };
-            $("#snap").click(function () {
-                context.drawImage(video, 0, 0, 300, 220);
+        function handleSelected(){
+            /**得到FileList的第一个元素，也就是上传的图片**/
+            var e = window.event || arguments[0];
+            let file = e.target.files[0];
+            console.log(file)
+            /**创建一个FileReader实例，用来读取文件**/
+            let reader = new FileReader();
+            /**成功读取之后将图片显示出来**/
+            reader.onload = function(e){
+                let img = document.getElementById('preview');
+                img.src = e.target.result;
                 document.getElementById('pic').style.display="";
-                var canvans = document.getElementById("canvas");
-                //获取浏览器页面的画布对象
-                //以下开始编 数据
-                var imgData = canvans.toDataURL();
-                //将图像转换为base64数据
-                image = imgData.substr(22);
-                console.log(image);
-                document.getElementById('pic').style.display="";
-            });
-            //navigator.getUserMedia这个写法在Opera中好像是navigator.getUserMedianow
-            if (navigator.getUserMedia) {
-                navigator.getUserMedia(videoObj, function (stream) {
-                    video.srcObject = stream;
-                    video.play();
-                }, errBack);
-            } else if (navigator.webkitGetUserMedia) {
-                navigator.webkitGetUserMedia(videoObj, function (stream) {
-                    video.src = window.webkitURL.createObjectURL(stream);
-                    video.play();
-                }, errBack);
-            }
-
-        }, false);
-
-
+                image = e.target.result;
+                img.onload = function (){
+                }
+            };
+            reader.readAsDataURL(file);
+        }
 
         function login() {
-
             $.ajax({
                 type: "GET",  //使用提交的方法 post、get
                 url: "searchFace/",   //提交的地址
@@ -217,13 +168,12 @@
                 async: true,   //配置是否异步操作
                 dataType: "json",//返回数据类型的格式
                 success: function (data) {  //回调操作
-                    // console.log(data);
-                    // console.log(data.error_code);
+                    console.log(data);
+                    console.log(data.error_code);
                     let state = data.error_code;
                     if(state === 0){
                         let score =data.result.user_list[0].score;
-                        let name =data.result.user_list[0].user_info;
-                        $('#myModalBody').html('欢迎您：'+name+'<br/>识别成功,本次相似度:'+score+'%');
+                        $('#myModalBody').html('识别成功,本次相似度:'+score.sub(0,3)+'%');
 					}else if (state === 404) {
                         $('#myModalBody').html('照片相似度过低无法识别您的身份,请拍摄更清晰的照片！')
 					}else {

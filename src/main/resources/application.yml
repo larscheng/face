@@ -3,9 +3,52 @@ server:
   max-http-header-size: 10000000
 
 
+spring:
+  application:
+    name: lease-singapore
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/face?useUnicode=true&characterEncoding=utf8
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      initial-size: 5
+      max-active: 100
+      min-idle: 5
+      max-wait: 60000
+      pool-prepared-statements: false
+      max-open-prepared-statements: 20
+      validation-query: SELECT 1
+      test-on-borrow: false
+      test-on-return: false
+      test-while-idle: true
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      use-global-data-source-stat: true
+      filters: stat,wall,log4j
+      filter:
+        stat:
+          enabled: true
+          db-type: mysql
+          merge-sql: true
+          log-slow-sql: true
+          slow-sql-millis: 1000
+      connection-init-sqls: SET NAMES utf8mb4
+
+  mvc:
+    view:
+     prefix: classpath:/templates/
+     suffix: .html
+
 
 face:
   appId: 15066202
   apiKey: 18mzC1Bf5ieqtisG7IWAhbDl
   secretKey: 4GioZSsQ3GDpEkkG1UfrVTLfVPyVgGKI
 
+
+mybatis:
+  mapper-locations:
+    - classpath:mapper/*Mapper.xml
+  type-aliases-package: com.face.yr.domain.po

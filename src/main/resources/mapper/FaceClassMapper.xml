@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.face.yr.dao.IFaceClassMapper">
+
+	<!-- 通用查询结果列-->
+	<resultMap id="FaceClassResultMap" type="com.face.yr.domain.po.FaceClass">
+		<id column="id" property="id" />
+ 		<result column="class_name" property="className" />
+ 		<result column="class_tea_id" property="classTeaId" />
+ 		<result column="class_begin" property="classBegin" />
+ 		<result column="class_end" property="classEnd" />
+ 		<result column="class_week" property="classWeek" />
+ 		<result column="class_state" property="classState" />
+ 		<result column="gmt_create" property="gmtCreate" />
+ 		<result column="gmt_modify" property="gmtModify" />
+	</resultMap>
+
+</mapper>

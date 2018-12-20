@@ -40,22 +40,22 @@ public class FaceApplicationTests {
         String image = Base64Util.encode(FileUtil.readFileByBytes("C:\\Users\\zhengql\\Pictures\\timg.jpg"));
         FaceUtil.search(image);
     }
-
-    @Test
-    public void searchFace() throws IOException {
-        String image = Base64Util.encode(FileUtil.readFileByBytes("C:\\Users\\zhengql\\Pictures\\timg.jpg"));
-        String res = faceRecognitionService.search(image,"140981251");
-        System.out.println("------------"+res);
-    }
-
-
-
-    @Test
-    public void addFace() throws IOException {
-        String image = Base64Util.encode(FileUtil.readFileByBytes("C:\\Users\\zhengql\\Pictures\\aaa.png"));
-        String res = faceRecognitionService.addUser(image,"14098125","zql");
-        System.out.println("------------"+res);
-    }
+//
+//    @Test
+//    public void searchFace() throws IOException {
+//        String image = Base64Util.encode(FileUtil.readFileByBytes("C:\\Users\\zhengql\\Pictures\\timg.jpg"));
+//        String res = faceRecognitionService.search(image,"140981251");
+//        System.out.println("------------"+res);
+//    }
+//
+//
+//
+//    @Test
+//    public void addFace() throws IOException {
+//        String image = Base64Util.encode(FileUtil.readFileByBytes("C:\\Users\\zhengql\\Pictures\\aaa.png"));
+//        String res = faceRecognitionService.addUser(image,"14098125","zql");
+//        System.out.println("------------"+res);
+//    }
 
 
 

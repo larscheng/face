@@ -21,14 +21,6 @@ import java.util.Map;
  */
 public class FaceUtil {
 
-//    @Value("${face.appId}")
-//    private String gtAppId;
-//
-//    @Value("${face.apiKey}")
-//    private static String apiKey;
-//
-//    @Value("${face.secretKey}")
-//    private static String secretKey;
 
 
     private static String API_KEY="18mzC1Bf5ieqtisG7IWAhbDl";
