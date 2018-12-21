@@ -18,21 +18,42 @@ import javax.servlet.http.HttpSession;
  */
 
 @Controller
-@SessionAttributes(value = {"sessionUser","userType"})
+//@SessionAttributes(value = {"sessionUser","userType"})
 public class BaseController {
     @Autowired
     private FaceUserService faceUserService;
 
+    /**
+     * 跳转登录
+     * @param model
+     * @return
+     */
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String searchFace(Model model) {
+    public String searchFace(Model model,HttpSession session) {
+        session.invalidate();
         return "login";
     }
 
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public String logout(Model model,HttpSession session) {
+        session.invalidate();
+        return "login";
+    }
+    /**
+     * 跳转首页
+     * @param model
+     * @return
+     */
     @RequestMapping(value = "/index", method = RequestMethod.GET)
     public String index(Model model) {
         return "index";
     }
 
+    /**
+     * 跳转教师页
+     * @param model
+     * @return
+     */
     @RequestMapping(value = "/tea", method = RequestMethod.GET)
     public String tea(Model model) {
 
@@ -40,12 +61,24 @@ public class BaseController {
     }
 
 
+    /***
+     * 跳转注册页
+     * @param model
+     * @return
+     */
     @RequestMapping(value = "/register", method = RequestMethod.GET)
     public String register(Model model) {
         return "register";
     }
 
 
+    /***
+     * 登录
+     * @param faceUser
+     * @param session
+     * @param model
+     * @return
+     */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
     public String login(FaceUser faceUser, HttpSession session,Model model) {

@@ -35,6 +35,8 @@ public class FaceUserVo implements Serializable {
 	/** 用户类型，0禁用1启用 */
 	private Integer userState;
 
+	private String userStateName;
+
 	/** 用户类型，1管理员2教师3学生 */
 	private Integer userType;
 
@@ -114,6 +116,14 @@ public class FaceUserVo implements Serializable {
 	public FaceUserVo setUserState(Integer userState) {
 		this.userState = userState;
 		return this;
+	}
+
+	public String getUserStateName() {
+		return userStateName;
+	}
+
+	public void setUserStateName(String userStateName) {
+		this.userStateName = userStateName;
 	}
 
 	public Integer getUserType() {

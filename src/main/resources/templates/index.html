@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="no-js" xmlns:th="http://www.w3.org/1999/xhtml">
     <head>
-        <title>免费简洁响应式Bootstrap后台主题模板BootAdmin - JS代码网</title>
+        <title>首页</title>
         <!-- Bootstrap -->
         <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
         <link href="bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
@@ -38,7 +38,7 @@
                                     </li>
                                     <li class="divider"></li>
                                     <li>
-                                        <a tabindex="-1" href="login.html">退出</a>
+                                        <a tabindex="-1" th:href="@{/}">退出</a>
                                     </li>
                                 </ul>
                             </li>
@@ -51,8 +51,19 @@
         </div>
         <div class="container-fluid">
             <div class="row-fluid">
-                <div class="span2" id="sidebar">
-                    <ul class="nav nav-list bs-docs-sidenav nav-collapse collapse" style="margin: auto">
+                <div class="span2" id="sidebar" th:switch="${session.userType}">
+                    <ul th:case="3" class="nav nav-list bs-docs-sidenav nav-collapse collapse" style="margin: auto">
+
+                        <li class="active">
+                            <a th:href="@{/index}" ><i class="icon-home"></i> 首页</a>
+                        </li>
+
+                        <li>
+                            <a th:href="@{/class/list}"> 课程列表</a>
+                        </li>
+                    </ul>
+                    <ul th:case="*" class="nav nav-list bs-docs-sidenav nav-collapse collapse" style="margin: auto">
+
                         <li class="active">
                             <a th:href="@{/index}" ><i class="icon-home"></i> 首页</a>
                         </li>
@@ -93,10 +104,6 @@
 	                                    <li>
 	                                        <a href="#">首页</a> <span class="divider">/</span>	
 	                                    </li>
-	                                    <li>
-	                                        <a href="#">设置</a> <span class="divider">/</span>	
-	                                    </li>
-	                                    <li class="active">工具</li>
 	                                </ul>
                             	</div>
                         	</div>
@@ -111,27 +118,21 @@
                                 </div>
                             </div>
                             <div class="block-content collapse in">
-                                <div class="span3">
-                                    <div class="chart" data-percent="73">73%</div>
-                                    <div class="chart-bottom-heading"><span class="label label-info">访问量</span>
+                                <div class="span4">
+                                    <div class="chart" data-percent="20">20</div>
+                                    <div class="chart-bottom-heading"><span class="label label-info">教师人数</span>
 
                                     </div>
                                 </div>
-                                <div class="span3">
-                                    <div class="chart" data-percent="53">53%</div>
-                                    <div class="chart-bottom-heading"><span class="label label-info">浏览量</span>
+                                <div class="span4">
+                                    <div class="chart" data-percent="50">50</div>
+                                    <div class="chart-bottom-heading"><span class="label label-info">学生人数</span>
 
                                     </div>
                                 </div>
-                                <div class="span3">
-                                    <div class="chart" data-percent="83">83%</div>
-                                    <div class="chart-bottom-heading"><span class="label label-info">用户</span>
-
-                                    </div>
-                                </div>
-                                <div class="span3">
-                                    <div class="chart" data-percent="13">13%</div>
-                                    <div class="chart-bottom-heading"><span class="label label-info">订单</span>
+                                <div class="span4">
+                                    <div class="chart" data-percent="1">1</div>
+                                    <div class="chart-bottom-heading"><span class="label label-info">课程数</span>
 
                                     </div>
                                 </div>
@@ -145,7 +146,7 @@
                             <div class="block">
                                 <div class="navbar navbar-inner block-header">
                                     <div class="muted pull-left">用户</div>
-                                    <div class="pull-right"><span class="badge badge-info">1,234</span>
+                                    <div class="pull-right"><span class="badge badge-info"></span>
 
                                     </div>
                                 </div>
@@ -189,7 +190,7 @@
                             <div class="block">
                                 <div class="navbar navbar-inner block-header">
                                     <div class="muted pull-left">订单</div>
-                                    <div class="pull-right"><span class="badge badge-info">752</span>
+                                    <div class="pull-right"><span class="badge badge-info"></span>
 
                                     </div>
                                 </div>

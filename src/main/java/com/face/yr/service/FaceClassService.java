@@ -1,9 +1,12 @@
 package com.face.yr.service;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.face.yr.common.FaceMapStructMapper;
 import com.face.yr.domain.Response;
 import com.face.yr.domain.po.FaceUser;
+import com.face.yr.domain.vo.FaceClassVo;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.face.yr.dao.IFaceClassMapper;
@@ -52,11 +55,21 @@ public class FaceClassService extends  ServiceImpl <IFaceClassMapper, FaceClass>
         }
     }
 
+    @Autowired
+    private FaceUserService faceUserService;
     public String listClass(Model model) {
         Map<String,Object> map = new HashMap<>();
             List<FaceClass> faceClasses = this.selectList(new EntityWrapper<>());
             if (!CollectionUtils.isEmpty(faceClasses)){
-                map.put("classList",faceClasses);
+
+                String[] week = new String[]{"星期一","星期二","星期三","星期四","星期五","星期六","星期日"};
+                List<FaceClassVo> vos = FaceMapStructMapper.INSTANCE.classesPoToVo(faceClasses);
+                for (FaceClassVo vo:vos){
+                    vo.setClassStateName(vo.getClassState()==1?"启用":"禁用")
+                            .setClassWeekName(week[vo.getClassWeek()])
+                    .setClassTeaName(faceUserService.selectById(vo.getClassTeaId()).getUserName());
+                }
+                map.put("classList",vos);
             }
             model.addAllAttributes(map);
             return "classList";

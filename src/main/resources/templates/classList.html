@@ -40,7 +40,7 @@
                             </li>
                             <li class="divider"></li>
                             <li>
-                                <a tabindex="-1" href="login.html">退出</a>
+                                <a tabindex="-1" th:href="@{/}">退出</a>
                             </li>
                         </ul>
                     </li>
@@ -53,8 +53,17 @@
 </div>
 <div class="container-fluid">
     <div class="row-fluid">
-        <div class="span2" id="sidebar">
-            <ul class="nav nav-list bs-docs-sidenav nav-collapse collapse" style="margin: auto">
+        <div th:switch="${session.userType}" class="span2" id="sidebar">
+            <ul th:case="3" class="nav nav-list bs-docs-sidenav nav-collapse collapse" style="margin: auto">
+                <li>
+                    <a th:href="@{/index}"><i class="icon-chevron-right"></i> 首页</a>
+                </li>
+
+                <li class="active">
+                    <a th:href="@{/class/list}"> 课程列表</a>
+                </li>
+            </ul>
+            <ul th:case="*" class="nav nav-list bs-docs-sidenav nav-collapse collapse" style="margin: auto">
                 <li>
                     <a th:href="@{/index}"><i class="icon-chevron-right"></i> 首页</a>
                 </li>
@@ -106,21 +115,21 @@
                                     <th style="text-align: center;vertical-align: inherit" >上课时间</th>
                                     <th style="text-align: center;vertical-align: inherit" >下课时间</th>
                                     <th style="text-align: center;vertical-align: inherit" >创建时间</th>
-                                    <th style="text-align: center;vertical-align: inherit" >操作</th>
+                                    <th th:if="${session.userType lt 2}" style="text-align: center;vertical-align: inherit" >操作</th>
                                 </tr>
                                 </thead>
                                 <tbody>
 
                                 <tr class="odd gradeX" th:each="class : ${classList}">
                                     <td style="text-align: center;vertical-align: inherit" th:text="${class.className}">Onions</td>
-                                    <td style="text-align: center;vertical-align: inherit"  th:text="${class.classTeaId}">2.41</td>
-                                    <td style="text-align: center;vertical-align: inherit"  th:text="${class.classWeek}">yes</td>
+                                    <td style="text-align: center;vertical-align: inherit"  th:text="${class.classTeaName}">2.41</td>
+                                    <td style="text-align: center;vertical-align: inherit"  th:text="${class.classWeekName}">yes</td>
                                     <td style="text-align: center;vertical-align: inherit"  th:text="${class.classBegin}">yes</td>
                                     <td style="text-align: center;vertical-align: inherit"  th:text="${class.classEnd}">yes</td>
                                     <td style="text-align: center;vertical-align: inherit"  th:text="${#dates.format(class.gmtCreate, 'yyyy-MM-dd HH:mm:ss')}">
                                         yes
                                     </td>
-                                    <td style="text-align: center;vertical-align: inherit" >
+                                    <td th:if="${session.userType lt 2}" style="text-align: center;vertical-align: inherit" >
                                         <!--<button class="btn btn-danger" th:onclick="|del(${class.id})|">删除</button>-->
                                         <button class="btn btn-warning" th:onclick="|updateInit(${class.id})|">编辑</button>
                                     </td>

@@ -18,6 +18,13 @@ public class FaceRecognitionController {
     @Autowired
     private FaceRecognitionService faceRecognitionService;
 
+    /**
+     * 签到
+     * @param image
+     * @param userId
+     * @param classId
+     * @return
+     */
     @RequestMapping(value = "/searchFace", method = RequestMethod.GET)
     @ResponseBody
     public String searchFace(@RequestParam("image") String image, @RequestParam("userId") String userId, @RequestParam("classId") Integer classId) {
@@ -25,9 +32,15 @@ public class FaceRecognitionController {
     }
 
 
+    /***
+     * 注册信息注册人脸
+     * @param vo
+     * @return
+     * @throws Exception
+     */
     @RequestMapping(value = "/addFace", method = RequestMethod.POST)
     @ResponseBody
-    public String addFace(FaceUserVo vo) {
+    public String addFace(FaceUserVo vo) throws Exception {
         return faceRecognitionService.addUser(vo);
     }
 }

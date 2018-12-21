@@ -12,6 +12,7 @@ import com.face.yr.domain.vo.FaceUserVo;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
@@ -37,7 +38,8 @@ public class FaceRecognitionService {
 
     private AipFace client = AipFaceClient.getInstance();
 
-    public String addUser(FaceUserVo vo) {
+    @Transactional(rollbackFor = Exception.class)
+    public String addUser(FaceUserVo vo) throws Exception {
         //1、注册登录账号
         FaceUser faceUser = new FaceUser()
                 .setUserCode(vo.getUserCode()).setUserName(vo.getUserName()).setUserPassword(vo.getUserPassword()).setUserPhone(vo.getUserPhone())
@@ -51,26 +53,26 @@ public class FaceRecognitionService {
         }
 
         //2、注册人脸
-//        String image = vo.getImage();
-//        String userInfo = vo.getUserName();
-//        String userId = faceUser.getId().toString();
-//        // 传入可选参数调用接口
-//        HashMap<String, String> options = new HashMap<>();
-//        options.put("user_info", userInfo);
-//        options.put("quality_control", "NORMAL");
-//        options.put("liveness_control", "LOW");
-//
-//        //"传入BASE64字符串或URL字符串或FACE_TOKEN字符串";
-//        String imageType = "BASE64";
-//        String groupId = "group_repeat";
-//        System.out.println(image);
-//        // 人脸注册
-//        JSONObject res = client.addUser(image, imageType, groupId, userId, options);
-//        Response response = JSON.parseObject(res.toString(), Response.class);
-//        System.out.println(res.toString(2));
-//        if (response.getError_code()!=200){
-//            return new JSONObject(new Response().setError_code(4001).setError_msg("注册失败！请调整光线和角度，重新拍照进行注册！")).toString();
-//        }
+        String image = vo.getImage();
+        String userInfo = vo.getUserName();
+        String userId = faceUser.getId().toString();
+        // 传入可选参数调用接口
+        HashMap<String, String> options = new HashMap<>();
+        options.put("user_info", userInfo);
+        options.put("quality_control", "NORMAL");
+        options.put("liveness_control", "LOW");
+
+        //"传入BASE64字符串或URL字符串或FACE_TOKEN字符串";
+        String imageType = "BASE64";
+        String groupId = "group_repeat";
+        System.out.println(image);
+        // 人脸注册
+        JSONObject res = client.addUser(image, imageType, groupId, userId, options);
+        Response response = JSON.parseObject(res.toString(), Response.class);
+        System.out.println(res.toString(2));
+        if (!response.getError_msg().equals("SUCCESS")){
+            throw new Exception(new JSONObject(new Response().setError_code(4001).setError_msg("注册失败！请调整光线和角度，重新拍照进行注册！")).toString());
+        }
         return new JSONObject(new Response().setError_code(8001).setError_msg("注册成功！")).toString();
     }
 

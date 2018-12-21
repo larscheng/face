@@ -2,7 +2,9 @@ package com.face.yr.service;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.face.yr.common.FaceMapStructMapper;
 import com.face.yr.domain.Response;
+import com.face.yr.domain.vo.FaceUserVo;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
@@ -33,11 +35,11 @@ public class FaceUserService extends  ServiceImpl <IFaceUserMapper, FaceUser>  {
      * @param user
      * @return
      */
-    public String addTea(FaceUser user) {
+    public String addTea(FaceUser user,Integer type) {
         if (ObjectUtils.isEmpty(user)){
             return new JSONObject(new Response().setError_code(4001).setError_msg("重新填写！")).toString();
         }
-        user.setUserType(2).setGmtCreate(new Date());
+        user.setUserType(type).setGmtCreate(new Date());
         if (this.insert(user)){
             return new JSONObject(new Response().setError_code(8001).setError_msg("添加成功！")).toString();
         }else {
@@ -55,7 +57,11 @@ public class FaceUserService extends  ServiceImpl <IFaceUserMapper, FaceUser>  {
         Map<String,Object> map = new HashMap<>();
         List<FaceUser> faceUsers = this.selectList(new EntityWrapper<>(new FaceUser().setUserType(type)));
         if (!CollectionUtils.isEmpty(faceUsers)){
-            map.put("userList",faceUsers);
+            List<FaceUserVo> vos = FaceMapStructMapper.INSTANCE.UsersPoToVo(faceUsers);
+            for (FaceUserVo vo:vos){
+                vo.setUserStateName(vo.getUserState()==1?"启用":"禁用");
+            }
+            map.put("userList",vos);
         }
         model.addAllAttributes(map);
     }

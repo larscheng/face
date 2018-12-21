@@ -61,6 +61,10 @@ public class FaceUser implements Serializable {
 	@TableField(value = "gmt_create")
 	public Date gmtCreate;
 
+	/** 最后一次登录时间 */
+	@TableField(value = "gmt_login")
+	public Date gmtLogin;
+
 	/**  */
 	@TableField(value = "gmt_modify")
 	public Date gmtModify;
