@@ -83,4 +83,14 @@ public class FaceUserService extends  ServiceImpl <IFaceUserMapper, FaceUser>  {
         session.setAttribute("userType",user.getUserType());
         return "index";
     }
+
+    public String delUser(Integer id) {
+        if (ObjectUtils.isEmpty(id)){
+            return new JSONObject(new Response().setError_code(4001).setError_msg("删除失败！")).toString();
+        }
+        if (this.deleteById(id)){
+            return new JSONObject(new Response().setError_code(8001).setError_msg("删除成功！")).toString();
+        }
+        return new JSONObject(new Response().setError_code(4001).setError_msg("删除失败！")).toString();
+    }
 }

@@ -23,6 +23,12 @@ public class FaceUserController {
         return faceUserService.addTea(user);
     }
 
+    @RequestMapping(value = "/user/delTea", method = RequestMethod.GET)
+    @ResponseBody
+    public String delTea(Integer id){
+        return faceUserService.delUser(id);
+    }
+
     @RequestMapping(value = "/user/listTea", method = RequestMethod.GET)
     public String listTea(Model model){
         faceUserService.listUser(model,2);
