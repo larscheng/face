@@ -4,6 +4,7 @@ import com.face.yr.domain.po.FaceUser;
 import com.face.yr.domain.vo.FaceUserVo;
 import com.face.yr.service.FaceRecognitionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -12,19 +13,21 @@ import org.springframework.web.bind.annotation.*;
  * @author zhengql
  * @date 2018/12/6 14:08
  */
-@RestController
+@Controller
 public class FaceRecognitionController {
     @Autowired
     private FaceRecognitionService faceRecognitionService;
 
     @RequestMapping(value = "/searchFace", method = RequestMethod.GET)
+    @ResponseBody
     public String searchFace(@RequestParam("image") String image, @RequestParam("userId") String userId, @RequestParam("classId") Integer classId) {
         return faceRecognitionService.search(image, userId,classId);
     }
 
 
     @RequestMapping(value = "/addFace", method = RequestMethod.POST)
-    public String addFace(@RequestBody FaceUserVo vo) {
+    @ResponseBody
+    public String addFace(FaceUserVo vo) {
         return faceRecognitionService.addUser(vo);
     }
 }

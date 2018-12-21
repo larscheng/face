@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <title>登录</title>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
@@ -20,25 +20,18 @@
         <div class="span4">
             <form class="form-signin" action="#">
                 <h2 class="form-signin-heading">注册</h2>
-                <input type="text" class="input-block-level" placeholder="姓名">
-                <input type="text" class="input-block-level" placeholder="账号">
-                <input type="password" class="input-block-level" placeholder="密码">
-                <input type="text" class="input-block-level" placeholder="确认密码">
-                <input type="text" class="input-block-level" placeholder="密码">
-                <input type="text" class="input-block-level" placeholder="密码">
-                <input type="text" class="input-block-level" placeholder="密码">
-                <input type="text" class="input-block-level" placeholder="密码">
-                <input type="text" class="input-block-level" placeholder="密码">
-                <input type="text" class="input-block-level" placeholder="密码">
-                <input type="text" class="input-block-level" placeholder="密码">
-                <input type="text" class="input-block-level" placeholder="密码">
+                <input type="text" class="input-block-level" id="userName" placeholder="请输入姓名">
+                <input type="text" class="input-block-level" id="userCode" placeholder="请输入账号">
+                <input type="password" class="input-block-level" id="userPassword" placeholder="请输入密码">
+                <input type="password" class="input-block-level" placeholder="请确认密码">
+                <input type="text" class="input-block-level" id="userPhone" placeholder="请输入手机号码">
                 <div class="form-group">
                     <p>已有账号? <a href="./login.html" th:href="@{/}">点击登录</a></p>
                 </div>
                 <div class="form-group">
                     <p><b>点击注册前请先拍一张照片</b></p>
                 </div>
-                <button class="btn btn-large btn-primary" type="submit">注册</button>
+                <button class="btn btn-large btn-primary" type="button" onclick="register()">注册</button>
             </form>
         </div>
         <div class="span4">
@@ -92,8 +85,6 @@
 <script src="bootstrap/js/bootstrap.min.js"></script>
 <script>
     var image;
-
-    var image;
     //判断浏览器是否支持HTML5 Canvas
     window.onload = function () {
         try {
@@ -142,21 +133,24 @@
 
 
     function register() {
-
+        var formData = new FormData();
+        formData.append("userCode",$("#userCode").val());
+        formData.append("userName",$("#userName").val());
+        formData.append("userPhone",$("#userPhone").val());
+        formData.append("userPassword",$("#userPassword").val());
+        formData.append("image",image);
         $.ajax({
-            type: "GET",  //使用提交的方法 post、get
-            url: "addFace/",   //提交的地址
-            data: {
-                userId: $('#userId').val(),
-                userInfo: $('#userInfo').val(),
-                image: image
-            },  //数据
+            type: "POST",  //使用提交的方法 post、get
+            url: "/addFace",   //提交的地址
+            data: formData,  //数据
             async: false,   //配置是否异步操作
             dataType: "json",//返回数据类型的格式
+            processData: false,
+            contentType: false,
             success: function (data) {  //回调操作
 
                 let state = data.error_code;
-                if (state === 0) {
+                if (state === 8001) {
                     $('#myModalBody').html('注册成功，现在可以去登录了');
                 } else {
                     $('#myModalBody').html(data.error_msg)

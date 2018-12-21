@@ -14,13 +14,6 @@
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     <script th:src="@{/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js}"></script>
-    
-    <style>
-        #aaa{
-            text-align: center; 
-            vertical-align: inherit
-        }
-    </style>
 </head>
 
 <body>
@@ -65,15 +58,14 @@
                 <li>
                     <a th:href="@{/index}"><i class="icon-chevron-right"></i> 首页</a>
                 </li>
-                <li class="active">
+                <li>
                     <a th:href="@{/user/listTea}"> 教师列表</a>
                 </li>
-
-                <li>
+                <li >
                     <a th:href="@{/user/listStu}"> 学生列表</a>
                 </li>
 
-                <li>
+                <li class="active">
                     <a th:href="@{/class/list}"> 课程列表</a>
                 </li>
             </ul>
@@ -90,74 +82,17 @@
                                                                                                 title="Show Sidebar"
                                                                                                 rel='tooltip'>&nbsp;</a></i>
                             <li>
-                                <a href="#">教师列表</a> <span class="divider">/</span>
+                                <a href="#">课程列表</a> <span class="divider">/</span>
                             </li>
                         </ul>
                     </div>
                 </div>
             </div>
             <div class="row-fluid">
-                <button class="btn btn-primary" data-toggle="modal" data-target="#addModal">添加教师</button>
-                <!--  定义模态框触发器，此处为按钮触发  -->
-
-
-                <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-                     aria-hidden="true">
-                    <!--  定义模态框，过渡效果为淡入，id为myModal,tabindex=-1可以禁用使用tab切换，aria-labelledby用于引用模态框的标题，aria-hidden=true保持模态框在触发前窗口不可见  -->
-                    <div class="modal-dialog">
-                        <!--  显示模态框对话框模型（若不写下一个div则没有颜色）  -->
-                        <div class="modal-content">
-                            <!--  显示模态框白色背景，所有内容都写在这个div里面  -->
-
-                            <div class="btn-primary modal-header">
-                                <!--  模态框标题  -->
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                <!--  关闭按钮  -->
-                                <h4>添加一个教师账号</h4>
-                                <!--  标题内容  -->
-                            </div>
-
-                            <div class="modal-body">
-                                <!--  模态框内容，我在此处添加一个表单 -->
-                                <form class="form-horizontal" id="addForm" role="form">
-                                    <div class="control-group success">
-                                        <label class="control-label" for="userName1">姓名</label>
-                                        <div class="controls">
-                                            <input type="text" id="userName1" placeholder="请输入姓名">
-                                        </div>
-                                    </div>
-                                    <div class="control-group success">
-                                        <label class="control-label" for="userCode1">登录账号</label>
-                                        <div class="controls">
-                                            <input type="text" id="userCode1" placeholder="请输入登录账号">
-                                        </div>
-                                    </div>
-                                    <div class="control-group success">
-                                        <label class="control-label" for="userPassword1">密码</label>
-                                        <div class="controls">
-                                            <input type="text" id="userPassword1" placeholder="请输入密码">
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-
-                            <div class="modal-footer">
-                                <!--  模态框底部样式，一般是提交或者确定按钮 -->
-                                <button type="button" onclick="addTea()" class="btn btn-info">确定</button>
-                                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                            </div>
-
-                        </div><!-- /.modal-content -->
-                    </div>
-                </div> <!-- /.modal -->
-
-
-            </div>
-            <div class="row-fluid">
                 <!-- block -->
                 <div class="block">
                     <div class="navbar navbar-inner block-header">
-                        <div class="muted pull-left">Bootstrap dataTables</div>
+                        <div class="muted pull-left">课程</div>
                     </div>
                     <div class="block-content collapse in">
                         <div class="span12">
@@ -165,27 +100,29 @@
                                    id="example">
                                 <thead>
                                 <tr>
-                                    <th style="text-align: center;vertical-align: inherit" >姓名</th>
-                                    <th style="text-align: center;vertical-align: inherit" >账号</th>
-                                    <th style="text-align: center;vertical-align: inherit" >电话</th>
-                                    <th style="text-align: center;vertical-align: inherit" >状态</th>
-                                    <th style="text-align: center;vertical-align: inherit" >注册时间</th>
+                                    <th style="text-align: center;vertical-align: inherit" >课程名</th>
+                                    <th style="text-align: center;vertical-align: inherit" >授课教师</th>
+                                    <th style="text-align: center;vertical-align: inherit" >星期</th>
+                                    <th style="text-align: center;vertical-align: inherit" >上课时间</th>
+                                    <th style="text-align: center;vertical-align: inherit" >下课时间</th>
+                                    <th style="text-align: center;vertical-align: inherit" >创建时间</th>
                                     <th style="text-align: center;vertical-align: inherit" >操作</th>
                                 </tr>
                                 </thead>
                                 <tbody>
 
-                                <tr class="odd gradeX" th:each="tea : ${userList}">
-                                    <td style="text-align: center;vertical-align: inherit" th:text="${tea.userName}">Onions</td>
-                                    <td style="text-align: center;vertical-align: inherit"  th:text="${tea.userCode}">2.41</td>
-                                    <td style="text-align: center;vertical-align: inherit"  th:text="${tea.userPhone}">yes</td>
-                                    <td style="text-align: center;vertical-align: inherit"  th:text="${tea.userState}">yes</td>
-                                    <td style="text-align: center;vertical-align: inherit"  th:text="${#dates.format(tea.gmtCreate, 'yyyy-MM-dd HH:mm:ss')}">
+                                <tr class="odd gradeX" th:each="class : ${classList}">
+                                    <td style="text-align: center;vertical-align: inherit" th:text="${class.className}">Onions</td>
+                                    <td style="text-align: center;vertical-align: inherit"  th:text="${class.classTeaId}">2.41</td>
+                                    <td style="text-align: center;vertical-align: inherit"  th:text="${class.classWeek}">yes</td>
+                                    <td style="text-align: center;vertical-align: inherit"  th:text="${class.classBegin}">yes</td>
+                                    <td style="text-align: center;vertical-align: inherit"  th:text="${class.classEnd}">yes</td>
+                                    <td style="text-align: center;vertical-align: inherit"  th:text="${#dates.format(class.gmtCreate, 'yyyy-MM-dd HH:mm:ss')}">
                                         yes
                                     </td>
                                     <td style="text-align: center;vertical-align: inherit" >
-                                        <button class="btn btn-danger" th:onclick="|delTea(${tea.id})|">删除</button>
-                                        <button class="btn btn-warning" th:onclick="|updateTeaInit(${tea.id})|">编辑</button>
+                                        <!--<button class="btn btn-danger" th:onclick="|del(${class.id})|">删除</button>-->
+                                        <button class="btn btn-warning" th:onclick="|updateInit(${class.id})|">编辑</button>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -217,21 +154,27 @@
                                 <!--  模态框内容，我在此处添加一个表单 -->
                                 <form class="form-horizontal" id="updateForm" role="form">
                                     <div class="control-group success">
-                                        <label class="control-label" for="userName">姓名</label>
+                                        <label class="control-label" for="className">课程名</label>
                                         <div class="controls">
-                                            <input type="text" disabled id="userName" placeholder="请输入姓名">
+                                            <input type="text" id="className" placeholder="请输入课程名">
                                         </div>
                                     </div>
                                     <div class="control-group success">
-                                        <label class="control-label" for="userCode">登录账号</label>
+                                        <label class="control-label" for="classWeek">星期</label>
                                         <div class="controls">
-                                            <input type="text" disabled id="userCode" placeholder="请输入登录账号">
+                                            <input type="text" id="classWeek" placeholder="请输入星期">
                                         </div>
                                     </div>
                                     <div class="control-group success">
-                                        <label class="control-label" for="userPhone">手机号</label>
+                                        <label class="control-label" for="classBegin">上课时间</label>
                                         <div class="controls">
-                                            <input type="text" id="userPhone" placeholder="请输入手机号">
+                                            <input type="text" id="classBegin" placeholder="请输入上课时间">
+                                        </div>
+                                    </div>
+                                    <div class="control-group success">
+                                        <label class="control-label" for="classEnd">下课时间</label>
+                                        <div class="controls">
+                                            <input type="text" id="classEnd" placeholder="请输入下课时间">
                                         </div>
                                     </div>
                                 </form>
@@ -292,54 +235,17 @@
     });
 
 
-    function addTea() {
-        var userCode = $("#userCode1").val();
-        var userPassword = $("#userPassword1").val();
-        var userName = $("#userName1").val();
-        var formData = new FormData();
-        formData.append("userCode",userCode);
-        formData.append("userPassword",userPassword);
-        formData.append("userName",userName);
-        $.ajax({
-            type: "POST",  //使用提交的方法 post、get
-            url: "/user/add",   //提交的地址
-            data: formData,  //数据
-            async: true,   //配置是否异步操作
-            dataType: "json",//返回数据类型的格式
-            processData: false,
-            contentType: false,
-            success: function (data) {  //回调操作+
-                console.log(data);
-                $('#addModal').modal('hide');
-                $('#myModalBody').html(data.error_msg);
-                $('#myModal').modal('show')
-            }
-        });
-    }
 
-    function delTea(id) {
+
+
+
+    var classId;
+
+    function updateInit(id) {
+        classId = id;
         $.ajax({
             type: "GET",  //使用提交的方法 post、get
-            url: "/user/del",   //提交的地址
-            data: {id:id},  //数据
-            dataType: "json",//返回数据类型的格式
-            success: function (data) {  //回调操作+
-
-                console.log(data);
-                console.log(data.error_msg);
-                $('#myModalBody').html(data.error_msg);
-                $('#myModal').modal('show')
-            }
-        });
-    }
-
-    var teaId;
-
-    function updateTeaInit(id) {
-        teaId = id;
-        $.ajax({
-            type: "GET",  //使用提交的方法 post、get
-            url: "/user/query",   //提交的地址
+            url: "/class/query",   //提交的地址
             data: {id:id},  //数据
             dataType: "json",//返回数据类型的格式
             success: function (data) {  //回调操作+
@@ -347,9 +253,10 @@
                 var obj = data.error_code;
                 if (typeof obj == "undefined" || obj == null || obj == ""){
                     console.log(data);
-                    $("#userCode").val(data.userCode);
-                    $("#userName").val(data.userName);
-                    $("#userPhone").val(data.userPhone)
+                    $("#className").val(data.className);
+                    $("#classBegin").val(data.classBegin);
+                    $("#classEnd").val(data.classEnd)
+                    $("#classWeek").val(data.classWeek)
                 }else {
                     console.log(data.error_msg);
                     $('#myModalBody').html(data.error_msg);
@@ -363,13 +270,14 @@
 
     function updateTea() {
         var formData = new FormData();
-        formData.append("userCode",$("#userCode").val());
-        formData.append("userName",$("#userName").val());
-        formData.append("userPhone",$("#userPhone").val());
-        formData.append("id",teaId);
+        formData.append("className",$("#className").val());
+        formData.append("classBegin",$("#classBegin").val());
+        formData.append("classEnd",$("#classEnd").val());
+        formData.append("classWeek",$("#classWeek").val());
+        formData.append("id",classId);
         $.ajax({
             type: "POST",  //使用提交的方法 post、get
-            url: "/user/update",   //提交的地址
+            url: "/class/update",   //提交的地址
             data: formData,  //数据
             dataType: "json",//返回数据类型的格式
             processData: false,

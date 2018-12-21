@@ -34,11 +34,11 @@ public class FaceClass implements Serializable {
 
 	/**  */
 	@TableField(value = "class_begin")
-	private Date classBegin;
+	private String classBegin;
 
 	/**  */
 	@TableField(value = "class_end")
-	private Date classEnd;
+	private String classEnd;
 
 	/**  */
 	@TableField(value = "class_week")
@@ -84,20 +84,20 @@ public class FaceClass implements Serializable {
 		return this;
 	}
 
-	public Date getClassBegin() {
+	public String getClassBegin() {
 		return this.classBegin;
 	}
 
-	public FaceClass setClassBegin(Date classBegin) {
+	public FaceClass setClassBegin(String classBegin) {
 		this.classBegin = classBegin;
 		return this;
 	}
 
-	public Date getClassEnd() {
+	public String getClassEnd() {
 		return this.classEnd;
 	}
 
-	public FaceClass setClassEnd(Date classEnd) {
+	public FaceClass setClassEnd(String classEnd) {
 		this.classEnd = classEnd;
 		return this;
 	}

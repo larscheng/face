@@ -42,31 +42,36 @@ public class FaceRecognitionService {
         FaceUser faceUser = new FaceUser()
                 .setUserCode(vo.getUserCode()).setUserName(vo.getUserName()).setUserPassword(vo.getUserPassword()).setUserPhone(vo.getUserPhone())
                 .setUserType(3).setGmtCreate(new Date());
-        if (!faceUserService.insert(faceUser)){
+        try {
+            if (!faceUserService.insert(faceUser)){
+                return new JSONObject(new Response().setError_code(4001).setError_msg("注册失败！")).toString();
+            }
+        }catch (Exception e){
             return new JSONObject(new Response().setError_code(4001).setError_msg("注册失败！")).toString();
         }
-        //2、注册人脸
-        String image = vo.getImage();
-        String userInfo = vo.getUserName();
-        String userId = faceUser.getId().toString();
-        // 传入可选参数调用接口
-        HashMap<String, String> options = new HashMap<>();
-        options.put("user_info", userInfo);
-        options.put("quality_control", "NORMAL");
-        options.put("liveness_control", "LOW");
 
-        //"传入BASE64字符串或URL字符串或FACE_TOKEN字符串";
-        String imageType = "BASE64";
-        String groupId = "group_repeat";
-        System.out.println(image);
-        // 人脸注册
-        JSONObject res = client.addUser(image, imageType, groupId, userId, options);
-        Response response = JSON.parseObject(res.toString(), Response.class);
-        System.out.println(res.toString(2));
-        if (response.getError_code()!=200){
-            return new JSONObject(new Response().setError_code(4001).setError_msg("注册失败！请调整光线和角度，重新拍照进行注册！")).toString();
-        }
-        return new JSONObject(faceUser).toString();
+        //2、注册人脸
+//        String image = vo.getImage();
+//        String userInfo = vo.getUserName();
+//        String userId = faceUser.getId().toString();
+//        // 传入可选参数调用接口
+//        HashMap<String, String> options = new HashMap<>();
+//        options.put("user_info", userInfo);
+//        options.put("quality_control", "NORMAL");
+//        options.put("liveness_control", "LOW");
+//
+//        //"传入BASE64字符串或URL字符串或FACE_TOKEN字符串";
+//        String imageType = "BASE64";
+//        String groupId = "group_repeat";
+//        System.out.println(image);
+//        // 人脸注册
+//        JSONObject res = client.addUser(image, imageType, groupId, userId, options);
+//        Response response = JSON.parseObject(res.toString(), Response.class);
+//        System.out.println(res.toString(2));
+//        if (response.getError_code()!=200){
+//            return new JSONObject(new Response().setError_code(4001).setError_msg("注册失败！请调整光线和角度，重新拍照进行注册！")).toString();
+//        }
+        return new JSONObject(new Response().setError_code(8001).setError_msg("注册成功！")).toString();
     }
 
     public String search(String image, String userId,Integer classId) {

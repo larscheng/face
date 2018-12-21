@@ -55,7 +55,7 @@ public class FaceUserService extends  ServiceImpl <IFaceUserMapper, FaceUser>  {
         Map<String,Object> map = new HashMap<>();
         List<FaceUser> faceUsers = this.selectList(new EntityWrapper<>(new FaceUser().setUserType(type)));
         if (!CollectionUtils.isEmpty(faceUsers)){
-            map.put("teaList",faceUsers);
+            map.put("userList",faceUsers);
         }
         model.addAllAttributes(map);
     }
@@ -92,5 +92,28 @@ public class FaceUserService extends  ServiceImpl <IFaceUserMapper, FaceUser>  {
             return new JSONObject(new Response().setError_code(8001).setError_msg("删除成功！")).toString();
         }
         return new JSONObject(new Response().setError_code(4001).setError_msg("删除失败！")).toString();
+    }
+
+    public String updateUser(FaceUser user) {
+        if (ObjectUtils.isEmpty(user)){
+            return new JSONObject(new Response().setError_code(4001).setError_msg("重新填写！")).toString();
+        }
+        if (this.updateById(user)){
+            return new JSONObject(new Response().setError_code(8001).setError_msg("编辑成功！")).toString();
+        }else {
+            return new JSONObject(new Response().setError_code(4001).setError_msg("编辑失败！")).toString();
+        }
+    }
+
+    public String queryUser(Integer id) {
+        if (ObjectUtils.isEmpty(id)){
+            return new JSONObject(new Response().setError_code(4001).setError_msg("重新填写！")).toString();
+        }
+        FaceUser user = this.selectById(id);
+        if (!ObjectUtils.isEmpty(user)){
+            return new JSONObject(user).toString();
+        }else {
+            return new JSONObject(new Response().setError_code(4001).setError_msg("编辑失败！")).toString();
+        }
     }
 }
