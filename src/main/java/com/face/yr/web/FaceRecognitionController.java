@@ -1,11 +1,15 @@
 package com.face.yr.web;
 
+import com.face.yr.domain.Response;
 import com.face.yr.domain.po.FaceUser;
 import com.face.yr.domain.vo.FaceUserVo;
 import com.face.yr.service.FaceRecognitionService;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpSession;
 
 /**
  * 描述:
@@ -20,15 +24,13 @@ public class FaceRecognitionController {
 
     /**
      * 签到
-     * @param image
-     * @param userId
-     * @param classId
+     * @param vo
      * @return
      */
-    @RequestMapping(value = "/searchFace", method = RequestMethod.GET)
+    @RequestMapping(value = "/searchFace", method = RequestMethod.POST)
     @ResponseBody
-    public String searchFace(@RequestParam("image") String image, @RequestParam("userId") String userId, @RequestParam("classId") Integer classId) {
-        return faceRecognitionService.search(image, userId,classId);
+    public String searchFace(FaceUserVo vo) {
+        return faceRecognitionService.search(vo);
     }
 
 
@@ -40,7 +42,11 @@ public class FaceRecognitionController {
      */
     @RequestMapping(value = "/addFace", method = RequestMethod.POST)
     @ResponseBody
-    public String addFace(FaceUserVo vo) throws Exception {
-        return faceRecognitionService.addUser(vo);
+    public String addFace(FaceUserVo vo) {
+        try {
+            return faceRecognitionService.addUser(vo);
+        } catch (Exception e) {
+            return new JSONObject(new Response().setError_code(4001).setError_msg("注册失败！请调整光线和角度，重新拍照进行注册！")).toString();
+        }
     }
 }

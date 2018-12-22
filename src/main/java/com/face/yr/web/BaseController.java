@@ -9,6 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 描述:
@@ -45,7 +47,13 @@ public class BaseController {
      * @return
      */
     @RequestMapping(value = "/index", method = RequestMethod.GET)
-    public String index(Model model) {
+    public String index(Model model,HttpSession session) {
+        FaceUser user = (FaceUser) session.getAttribute("sessionUser");
+        user = faceUserService.selectById(user.getId());
+        Map<String,Object> map = new HashMap<>();
+        map = faceUserService.checkSign(map,user);
+        model.addAllAttributes(map);
+        session.setAttribute("sessionUser",user);
         return "index";
     }
 
@@ -56,7 +64,6 @@ public class BaseController {
      */
     @RequestMapping(value = "/tea", method = RequestMethod.GET)
     public String tea(Model model) {
-
         return "teaList";
     }
 
@@ -73,6 +80,16 @@ public class BaseController {
 
 
     /***
+     * 跳转签到页
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/stuSign", method = RequestMethod.GET)
+    public String stuSign(Model model) {
+        return "sign";
+    }
+
+    /***
      * 登录
      * @param faceUser
      * @param session
@@ -80,9 +97,8 @@ public class BaseController {
      * @return
      */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    @ResponseBody
     public String login(FaceUser faceUser, HttpSession session,Model model) {
 //        return faceUserService.login2(faceUser,session,model);
-        return faceUserService.login(faceUser,session);
+        return faceUserService.login(faceUser,session,model);
     }
 }

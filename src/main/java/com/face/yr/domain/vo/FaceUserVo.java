@@ -43,6 +43,8 @@ public class FaceUserVo implements Serializable {
 	/** 成功签到次数 */
 	private Integer stuSignTimes;
 
+	public Integer stuLateTimes;
+
 	/** 缺勤次数 */
 	private Integer stuAbsenteeTimes;
 
@@ -51,9 +53,18 @@ public class FaceUserVo implements Serializable {
 
 	/**  */
 	private Date gmtModify;
+	private Date gmtLogin;
 
 	private String image;
 
+	public Date getGmtLogin() {
+		return gmtLogin;
+	}
+
+	public FaceUserVo setGmtLogin(Date gmtLogin) {
+		this.gmtLogin = gmtLogin;
+		return this;
+	}
 
 	public String getUserName() {
 		return userName;
@@ -79,6 +90,15 @@ public class FaceUserVo implements Serializable {
 
 	public FaceUserVo setId(Integer id) {
 		this.id = id;
+		return this;
+	}
+
+	public Integer getStuLateTimes() {
+		return stuLateTimes;
+	}
+
+	public FaceUserVo setStuLateTimes(Integer stuLateTimes) {
+		this.stuLateTimes = stuLateTimes;
 		return this;
 	}
 

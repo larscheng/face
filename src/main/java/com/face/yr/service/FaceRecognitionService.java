@@ -2,6 +2,7 @@ package com.face.yr.service;
 
 import com.alibaba.fastjson.JSON;
 import com.baidu.aip.face.AipFace;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.face.yr.common.AipFaceClient;
 import com.face.yr.domain.Response;
 import com.face.yr.domain.User_list;
@@ -17,9 +18,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * 描述:
@@ -35,6 +34,8 @@ public class FaceRecognitionService {
 
     @Autowired
     private FaceSignService faceSignService;
+    @Autowired
+    private FaceClassService faceClassService;
 
     private AipFace client = AipFaceClient.getInstance();
 
@@ -71,17 +72,23 @@ public class FaceRecognitionService {
         Response response = JSON.parseObject(res.toString(), Response.class);
         System.out.println(res.toString(2));
         if (!response.getError_msg().equals("SUCCESS")){
+
             throw new Exception(new JSONObject(new Response().setError_code(4001).setError_msg("注册失败！请调整光线和角度，重新拍照进行注册！")).toString());
         }
         return new JSONObject(new Response().setError_code(8001).setError_msg("注册成功！")).toString();
     }
 
-    public String search(String image, String userId,Integer classId) {
+    //签到+人脸认证
+    public String search(FaceUserVo vo) {
+        Integer userId = vo.getId();
+        String image = vo.getImage();
+
+
         // 传入可选参数调用接口
         HashMap<String, String> options = new HashMap<>();
         options.put("quality_control", "NORMAL");
         options.put("liveness_control", "LOW");
-        options.put("user_id", userId);
+        options.put("user_id", userId.toString());
         options.put("max_user_num", "1");
 
         //"传入BASE64字符串或URL字符串或FACE_TOKEN字符串";
@@ -92,28 +99,58 @@ public class FaceRecognitionService {
         JSONObject res = client.search(image, imageType, groupIdList, options);
         Response response = JSON.parseObject(res.toString(), Response.class);
         if (ObjectUtils.isEmpty(response.getResult())) {
-//            response = new Response().setError_code(404);
-            return new JSONObject(response).toString();
+            return new JSONObject(new Response().setError_code(4001).setError_msg("签到失败！请调整光线和角度，重新拍照进行签到！")).toString();
         }
         List<User_list> userLists = response.getResult().getUser_list();
         if (CollectionUtils.isEmpty(userLists)) {
-//            response = new Response().setError_code(404);
-            return new JSONObject(response).toString();
+            return new JSONObject(new Response().setError_code(4001).setError_msg("签到失败！请调整光线和角度，重新拍照进行签到！")).toString();
         }
         if (userLists.get(0).getScore() < 90f) {
-            response = new Response().setError_code(404);
-            return new JSONObject(response).toString();
+            return new JSONObject(new Response().setError_code(4001).setError_msg("签到失败！请调整光线和角度，重新拍照进行签到！")).toString();
         }
-        //修改学生签到状态
         FaceUser faceUser = faceUserService.selectById(userId);
-        FaceUser user = new FaceUser().setId(faceUser.getId()).setStuSignTimes(faceUser.getStuSignTimes()+1);
-        faceUserService.updateById(user);
-        //添加学生签到记录
-        FaceSign sign = new FaceSign()
-                .setClassId(classId).setStuId(faceUser.getId()).setGmtCreate(new Date())
-                .setSignDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-        faceSignService.insert(sign);
-        return new JSONObject(response).toString();
+        FaceUser user = new FaceUser();
+        //判断正常还是迟到
+        List<FaceClass> faceClasses = faceClassService.selectList(new EntityWrapper<>());
+        FaceClass faceClass = faceClasses.get(0);
+        String[] time = faceClass.getClassBegin().split(":");
+        Calendar calendar1 = new GregorianCalendar();
+        calendar1.setTime(new Date());
+        calendar1.set(Calendar.HOUR_OF_DAY, Integer.parseInt(time[0]));
+        calendar1.set(Calendar.MINUTE, Integer.parseInt(time[1]));
+        calendar1.set(Calendar.SECOND, 0);
+        //上课时间
+        long signStartTime = calendar1.getTime().getTime();
+        long now = System.currentTimeMillis();
+
+        FaceSign sign = new FaceSign();
+        if (now>signStartTime){
+            //已错过签到时间，迟到
+            user = new FaceUser().setId(faceUser.getId()).setGmtLogin(new Date()).setStuLateTimes(faceUser.getStuLateTimes()+1);
+            sign = new FaceSign()
+                    .setClassId(faceClass.getId()).setStuId(faceUser.getId()).setGmtCreate(new Date())
+                    .setSignState(1)
+                    .setGmtCreate(new Date());
+
+            //更新学生信息
+            faceUserService.updateById(user);
+            //添加学生签到记录
+            faceSignService.insert(sign);
+            return new JSONObject(new Response().setError_code(4001).setError_msg("签到成功，今天来的有点晚了迟到了哦！！！")).toString();
+        }else {
+            //提前打卡
+            user = new FaceUser().setId(faceUser.getId()).setGmtLogin(new Date()).setStuSignTimes(faceUser.getStuSignTimes()+1);
+            sign = new FaceSign()
+                    .setClassId(faceClass.getId()).setStuId(faceUser.getId()).setGmtCreate(new Date())
+                    .setSignState(0)
+                    .setGmtCreate(new Date());
+
+            //更新学生信息
+            faceUserService.updateById(user);
+            //添加学生签到记录
+            faceSignService.insert(sign);
+            return new JSONObject(new Response().setError_code(4001).setError_msg("签到成功！！！")).toString();
+        }
     }
 
 

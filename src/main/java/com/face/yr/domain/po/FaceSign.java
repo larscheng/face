@@ -32,9 +32,9 @@ public class FaceSign implements Serializable {
 	@TableField(value = "stu_id")
 	private Integer stuId;
 
-	/** 打卡日期 */
-	@TableField(value = "sign_date")
-	private String signDate;
+	/** 打卡类型，0正常，1迟到 */
+	@TableField(value = "sign_state")
+	private Integer signState;
 
 	/**  */
 	@TableField(value = "gmt_create")
@@ -68,12 +68,12 @@ public class FaceSign implements Serializable {
 		return this;
 	}
 
-	public String getSignDate() {
-		return this.signDate;
+	public Integer getSignState() {
+		return signState;
 	}
 
-	public FaceSign setSignDate(String signDate) {
-		this.signDate = signDate;
+	public FaceSign setSignState(Integer signState) {
+		this.signState = signState;
 		return this;
 	}
 

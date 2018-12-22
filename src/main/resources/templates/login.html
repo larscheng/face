@@ -1,91 +1,103 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.w3.org/1999/xhtml">
-  <head>
+<head>
     <title>登录</title>
-	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
     <!-- Bootstrap -->
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
     <link href="assets/styles.css" rel="stylesheet" media="screen">
-     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
-  </head>
-  <body id="login">
-    <div class="container">
+</head>
+<body id="login">
+<div class="container">
 
-      <form class="form-signin" id="loginForm"    >
+    <form class="form-signin" id="loginForm" th:action="@{/login}" th:method="POST">
         <h2 class="form-signin-heading">登录</h2>
         <input type="text" class="input-block-level" name="userCode" id="userCode" placeholder="账号">
         <input type="password" class="input-block-level" name="userPassword" id="userPassword" placeholder="密码">
         <div class="form-group">
-          <p>暂无账号? <a href="./register.html" th:href="@{/register}">点击注册</a></p>
+            <p>暂无账号? <a href="./register.html" th:href="@{/register}">点击注册</a></p>
         </div>
-        <button class="btn btn-large btn-primary" type="button" onclick="login()">登录</button>
+        <button class="btn btn-large btn-primary" type="submit">登录</button>
         <!--<button class="btn btn-large btn-primary" type="submit">登录</button>-->
-      </form>
+    </form>
 
-      <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-           aria-hidden="true">
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
         <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal"
-                      aria-hidden="true">×
-              </button>
-              <h4 class="modal-title" id="myModalLabel">
-                提示
-              </h4>
-            </div>
-            <div class="modal-body" id="myModalBody" style="text-align: center">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-hidden="true">×
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        提示
+                    </h4>
+                </div>
+                <div class="modal-body" id="myModalBody" style="text-align: center">
 
-            </div>
-            <div class="modal-footer">
-              <button type="button" onclick="window.location.reload()" class="btn btn-default"
-                      data-dismiss="modal">关闭
-              </button>
-            </div>
-          </div><!-- /.modal-content -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="window.location.href='/'" class="btn btn-default"
+                            data-dismiss="modal">关闭
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
-      </div><!-- /.modal -->
-    </div> <!-- /container -->
-    <script src="vendors/jquery-1.9.1.min.js"></script>
-    <script src="bootstrap/js/bootstrap.min.js"></script>
-    <script type="text/javascript" >
+    </div><!-- /.modal -->
+</div> <!-- /container -->
+<script src="vendors/jquery-1.9.1.min.js"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var msg = '[[${msg}]]';
+        var times = 0;
+        if (msg === '登陆失败,请重试' && times === 0) {
+            $('#myModalBody').html(msg);
+            times++;
+            $('#myModal').modal('show')
 
-        function login() {
-            var form = new FormData($('#loginForm')[0]);
-            var userCode = $("#userCode").val();
-            var userPassword = $("#userPassword").val();
-            var formData = new FormData();
-            formData.append("userCode",userCode);
-            formData.append("userPassword",userPassword);
-
-            $.ajax({
-                type: "POST",  //使用提交的方法 post、get
-                url: "/login",   //提交的地址
-                data: form,  //数据
-                async: true,   //配置是否异步操作
-                dataType: "json",//返回数据类型的格式
-                processData: false,
-                contentType: false,
-                success: function (data) {  //回调操作+
-                    console.log(data);
-                    console.log(11111);
-                    var sessionUser = data.msgBody;
-                    console.log(sessionUser);
-                    let state = data.error_code;
-                    if (state === 8001){
-                        location.href="/index";
-                    }else {
-                        $('#myModalBody').html(data.error_msg)
-                        $('#myModal').modal('show')
-                    }
-                }
-            });
         }
-    </script>
-  </body>
+
+    });
+
+
+    function login() {
+        var form = new FormData($('#loginForm')[0]);
+        var userCode = $("#userCode").val();
+        var userPassword = $("#userPassword").val();
+        var formData = new FormData();
+        formData.append("userCode", userCode);
+        formData.append("userPassword", userPassword);
+
+        $.ajax({
+            type: "POST",  //使用提交的方法 post、get
+            url: "/login",   //提交的地址
+            data: form,  //数据
+            async: true,   //配置是否异步操作
+            dataType: "json",//返回数据类型的格式
+            processData: false,
+            contentType: false,
+            success: function (data) {  //回调操作+
+                console.log(data);
+                console.log(11111);
+                var sessionUser = data.msgBody;
+                console.log(sessionUser);
+                let state = data.error_code;
+                if (state === 8001) {
+                    location.href = "/index";
+                } else {
+                    $('#myModalBody').html(data.error_msg)
+                    $('#myModal').modal('show')
+                }
+            }
+        });
+    }
+</script>
+</body>
 </html>

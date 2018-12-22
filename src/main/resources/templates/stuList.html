@@ -43,7 +43,7 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li>
-                                <a tabindex="-1" href="#">个人资料</a>
+                                <a tabindex="-1" th:onclick="|updateTeaInit(${session.sessionUser.id})|">个人资料</a>
                             </li>
                             <li class="divider"></li>
                             <li>
@@ -73,6 +73,10 @@
                 </li>
                 <li>
                     <a th:href="@{/class/list}"> 课程列表</a>
+                </li>
+
+                <li>
+                    <a  th:href="@{/sign/list}"> 签到记录</a>
                 </li>
             </ul>
         </div>

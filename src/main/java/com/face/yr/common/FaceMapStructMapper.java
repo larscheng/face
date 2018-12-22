@@ -5,8 +5,10 @@ package com.face.yr.common;
 
 
 import com.face.yr.domain.po.FaceClass;
+import com.face.yr.domain.po.FaceSign;
 import com.face.yr.domain.po.FaceUser;
 import com.face.yr.domain.vo.FaceClassVo;
+import com.face.yr.domain.vo.FaceSignVo;
 import com.face.yr.domain.vo.FaceUserVo;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -26,6 +28,9 @@ public interface FaceMapStructMapper {
 
     FaceClassVo classePoToVo(FaceClass faceClasses);
     List<FaceClassVo> classesPoToVo(List<FaceClass> faceClasses);
+
+    FaceSignVo signsPoToVo(FaceSign faceSign);
+    List<FaceSignVo> signsPoToVo(List<FaceSign> faceSigns);
 }
 
 

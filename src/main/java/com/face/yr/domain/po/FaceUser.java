@@ -53,6 +53,10 @@ public class FaceUser implements Serializable {
 	@TableField(value = "stu_sign_times")
 	public Integer stuSignTimes;
 
+	/** 迟到次数 */
+	@TableField(value = "stu_late_times")
+	public Integer stuLateTimes;
+
 	/** 缺勤次数 */
 	@TableField(value = "stu_absentee_times")
 	public Integer stuAbsenteeTimes;
@@ -69,6 +73,15 @@ public class FaceUser implements Serializable {
 	@TableField(value = "gmt_modify")
 	public Date gmtModify;
 
+
+	public Date getGmtLogin() {
+		return gmtLogin;
+	}
+
+	public FaceUser setGmtLogin(Date gmtLogin) {
+		this.gmtLogin = gmtLogin;
+		return this;
+	}
 
 	public Integer getId() {
 		return this.id;
@@ -94,6 +107,15 @@ public class FaceUser implements Serializable {
 
 	public FaceUser setUserCode(String userCode) {
 		this.userCode = userCode;
+		return this;
+	}
+
+	public Integer getStuLateTimes() {
+		return stuLateTimes;
+	}
+
+	public FaceUser setStuLateTimes(Integer stuLateTimes) {
+		this.stuLateTimes = stuLateTimes;
 		return this;
 	}
 

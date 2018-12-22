@@ -7,7 +7,7 @@
 		<id column="id" property="id" />
  		<result column="class_id" property="classId" />
  		<result column="stu_id" property="stuId" />
- 		<result column="sign_date" property="signDate" />
+ 		<result column="sign_state" property="signState" />
  		<result column="gmt_create" property="gmtCreate" />
 	</resultMap>
 

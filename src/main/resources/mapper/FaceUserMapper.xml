@@ -11,6 +11,7 @@
  		<result column="user_state" property="userState" />
  		<result column="user_type" property="userType" />
  		<result column="stu_sign_times" property="stuSignTimes" />
+ 		<result column="stu_late_times" property="stuLateTimes" />
  		<result column="stu_absentee_times" property="stuAbsenteeTimes" />
  		<result column="gmt_login" property="gmtLogin" />
  		<result column="gmt_create" property="gmtCreate" />
