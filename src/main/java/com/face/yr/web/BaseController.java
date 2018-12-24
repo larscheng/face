@@ -20,11 +20,10 @@ import java.util.Map;
  */
 
 @Controller
-//@SessionAttributes(value = {"sessionUser","userType"})
 public class BaseController {
+
     @Autowired
     private FaceUserService faceUserService;
-
     /**
      * 跳转登录
      * @param model

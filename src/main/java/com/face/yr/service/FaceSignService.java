@@ -14,7 +14,9 @@ import com.face.yr.domain.po.FaceSign;
 import com.baomidou.framework.service.impl.ServiceImpl;
 import org.springframework.ui.Model;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,9 +34,15 @@ public class FaceSignService extends ServiceImpl<IFaceSignMapper, FaceSign> {
     @Autowired
     private FaceClassService faceClassService;
 
-    public void listSign(Model model) {
+    public void listSign(Model model,Integer userId) {
         Map<String, Object> map = new HashMap<>();
-        List<FaceSign> faceSigns = this.selectList(new EntityWrapper<>(new FaceSign()));
+        List<FaceSign> faceSigns = new ArrayList<>();
+        if (ObjectUtils.isEmpty(userId)){
+            faceSigns = this.selectList(new EntityWrapper<>(new FaceSign()));
+        }else {
+            faceSigns = this.selectList(new EntityWrapper<>(new FaceSign().setStuId(userId)));
+        }
+
         if (!CollectionUtils.isEmpty(faceSigns)) {
             List<FaceSignVo> vos = FaceMapStructMapper.INSTANCE.signsPoToVo(faceSigns);
             for (FaceSignVo vo : vos) {

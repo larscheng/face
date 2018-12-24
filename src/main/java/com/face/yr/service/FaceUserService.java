@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.face.yr.common.FaceMapStructMapper;
 import com.face.yr.domain.Response;
 import com.face.yr.domain.po.FaceClass;
+import com.face.yr.domain.po.FaceSign;
 import com.face.yr.domain.vo.FaceUserVo;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.face.yr.dao.IFaceUserMapper;
 import com.face.yr.domain.po.FaceUser;
 import com.baomidou.framework.service.impl.ServiceImpl;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
@@ -30,6 +32,8 @@ public class FaceUserService extends ServiceImpl<IFaceUserMapper, FaceUser> {
     @Autowired
     private FaceClassService faceClassService;
 
+    @Autowired
+    private FaceSignService faceSignService;
     /***
      * 添加教师
      * @param user
@@ -125,7 +129,7 @@ public class FaceUserService extends ServiceImpl<IFaceUserMapper, FaceUser> {
         //下课时间
         long signOverTime = calendar1.getTime().getTime();
         for (FaceUser faceUser1:faceUsers){
-            if (faceUser1.getGmtLogin().getTime()>startTime&&faceUser1.getGmtLogin().getTime()<signOverTime){
+            if (!ObjectUtils.isEmpty(faceUser1.gmtLogin)&&faceUser1.getGmtLogin().getTime()>startTime&&faceUser1.getGmtLogin().getTime()<signOverTime){
                 //当天已打卡
                 signList.add(faceUser1);
             }else {
@@ -136,7 +140,7 @@ public class FaceUserService extends ServiceImpl<IFaceUserMapper, FaceUser> {
         if (user.getUserType().equals(3)){
 
             if (chinaWeek==faceClass.getClassWeek()){
-                if (user.getGmtLogin().getTime()>startTime&&user.getGmtLogin().getTime()<signOverTime){
+                if (!ObjectUtils.isEmpty(user.gmtLogin)&&user.getGmtLogin().getTime()>startTime&&user.getGmtLogin().getTime()<signOverTime){
                     //当天已打卡
                     map.put("isSign",1);
                 }else {
@@ -180,11 +184,19 @@ public class FaceUserService extends ServiceImpl<IFaceUserMapper, FaceUser> {
         return "index";
     }
 
+    @Transactional
     public String delUser(Integer id) {
         if (ObjectUtils.isEmpty(id)) {
             return new JSONObject(new Response().setError_code(4001).setError_msg("删除失败！")).toString();
         }
+        FaceUser user = this.selectById(id);
         if (this.deleteById(id)) {
+            if (user.getUserType()==3){
+                List<FaceSign> list = faceSignService.selectList(new EntityWrapper<>(new FaceSign().setStuId(user.getId())));
+                if (!CollectionUtils.isEmpty(list)){
+                   list.forEach(a->faceSignService.deleteById(a.getId()));
+                }
+            }
             return new JSONObject(new Response().setError_code(8001).setError_msg("删除成功！")).toString();
         }
         return new JSONObject(new Response().setError_code(4001).setError_msg("删除失败！")).toString();
